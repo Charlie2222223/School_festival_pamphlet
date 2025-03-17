@@ -36,7 +36,7 @@ scene.add(pointLight);
 // 図形と速度ベクトルの管理
 const shapes: { mesh: THREE.Mesh; velocity: THREE.  Vector3 }[] = [];
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 60; i++) {
   const shapeType = Math.random(); // 0〜1 の間の値
   let geometry: THREE.BufferGeometry;
 

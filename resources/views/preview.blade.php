@@ -43,32 +43,32 @@
 </head>
 <body>
 
-  <div class="editor">
+<div class="editor">
     <textarea id="codeArea">
-<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      body { background: #fefefe; }
-    </style>
-  </head>
-  <body>
-    <h1>Hello!</h1>
-  </body>
-</html>
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+            body { background: #fefefe; }
+            </style>
+        </head>
+        <body>
+            <h1>Hello World</h1>
+            <p>リアルタイム表示します</p>
+        </body>
+        </html>
     </textarea>
-  </div>
+</div>
+<iframe id="previewFrame"></iframe>
 
-  <iframe id="previewFrame"></iframe>
-
-  <script>
+<script>
     const editor = CodeMirror.fromTextArea(document.getElementById("codeArea"), {
         mode: "htmlmixed",
         lineNumbers: true,
         autoCloseTags: {
             whenClosing: true,
             whenOpening: true,
-            indentTags: []  // ← これで <div> などで改行されにくくなります
+            indentTags: []
         },
         theme: "default"
     });
