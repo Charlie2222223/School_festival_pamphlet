@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>Three.js背景 × フォーム</title>
+<meta charset="UTF-8" />
+<title>Three.js背景 × フォーム</title>
 
-  {{-- ViteでThree.js/TypeScriptを読み込む --}}
-  @vite('resources/js/three-app.ts')
+{{-- ViteでThree.js/TypeScriptを読み込む --}}
+@vite('resources/js/three-app.ts')
 
-  <style>
+<style>
     html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;å
+    width: 100vw;
+    font-family: 'Helvetica Neue', sans-serif;
+    background: #ffffff;
     }
 
     canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
     }
 
     .background-pattern {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: white;
-      background-image:
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    background-image:
         linear-gradient(to right, #ccc 1px, transparent 1px),
         linear-gradient(to bottom, #ccc 1px, transparent 1px);
-      background-size: 32px 32px;
-      opacity: 0.3;
-      pointer-events: none;
+    background-size: 32px 32px;
+    opacity: 0.3;
+    pointer-events: none;
     }
 
     .app {
@@ -78,8 +78,8 @@
     border: 2px solid black;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
-     margin-left: -15%;
-     margin-right: 10%;
+    margin-left: -15%;
+    margin-right: 10%;
     }
 
     .icon p {
@@ -191,7 +191,7 @@
     border: 8px solid green;
     }
 
-  .center-box {
+.center-box {
     width: 42%;
     height: 80%;
     /* margin-left: 5%; */
@@ -213,9 +213,9 @@
     justify-content: center;
     align-items: center;
     position: relative; /* ★ ここを追加 */
-  }
+}
 
-  .button-group {
+.button-group {
     position: absolute;
     right: -40%;
     top: 60%;
@@ -223,9 +223,9 @@
     display: block;
     flex-direction: column;
     gap: 12px;
-  }
+}
 
-  .button-group button {
+.button-group button {
     width: 60px;
     height: 60px;
     font-size: 40px;
@@ -236,65 +236,64 @@
     cursor: pointer;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     transition: background 0.3s;
-  }
+}
 
-  .button-group button:hover {
+.button-group button:hover {
     background-color: #009999;
-  }
+}
 
-  .dropdown {
-  width: 77%;
-  margin: 1rem auto;
-  padding: 0.4rem 1rem;
-  font-size: 18px;
-  font-weight: bold;
-  color: #00fe19;
-  background-color: #ffffff;
-  border: 2px solid #00fe19;
-  border-radius: 6px;
+.dropdown {
+width: 77%;
+margin: 1rem auto;
+padding: 0.4rem 1rem;
+font-size: 18px;
+font-weight: bold;
+color: #00fe19;
+background-color: #ffffff;
+border: 2px solid #00fe19;
+border-radius: 6px;
 }
 
 .dropdown summary {
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
+cursor: pointer;
+list-style: none;
+user-select: none;
 }
 
 .dropdown[open] summary {
-  border-bottom: 1px solid #00fe19;
+border-bottom: 1px solid #00fe19;
 }
 
 .dropdown-content {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+margin-top: 0.5rem;
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
 }
 
 .dropdown-btn {
-  width: 100%;
-  padding: 0.5rem;
-  font-size: 16px;
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-align: left;
-  cursor: pointer;
+width: 100%;
+padding: 0.5rem;
+font-size: 16px;
+background-color: #f8f8f8;
+border: 1px solid #ccc;
+border-radius: 4px;
+text-align: left;
+cursor: pointer;
 }
 .dropdown-btn:hover {
-  background-color: #e0f8f0;
+background-color: #e0f8f0;
 }
 
 </style>
 
-  </style>
 </head>
 <body>
-  <div class="background-pattern"></div>
-  <canvas id="myCanvas"></canvas>
-  <div class="app">
+<div class="background-pattern"></div>
+<canvas id="myCanvas"></canvas>
+<div class="app">
     <div class="main">
-      <div class="sidebar">
+    <div class="sidebar">
         <div class="icon">
             <div class="icon_circle"></div>
             <p>R3SB</p>
@@ -310,43 +309,43 @@
                 パンフレットを作成
             </button>
             <div class="list">
-                <ul>閲覧リスト</ul>
-              
-                <details class="dropdown">
-                  <summary>R メニュー</summary>
-                  <div class="dropdown-content">
-                    <button class="dropdown-btn">Rの内容1</button>
-                    <button class="dropdown-btn">Rの内容2</button>
-                  </div>
-                </details>
-              
-                <details class="dropdown">
-                  <summary>S メニュー</summary>
-                  <div class="dropdown-content">
-                    <button class="dropdown-btn">Sの内容1</button>
-                    <button class="dropdown-btn">Sの内容2</button>
-                  </div>
-                </details>
-              
-                <details class="dropdown">
-                  <summary>J メニュー</summary>
-                  <div class="dropdown-content">
-                    <button class="dropdown-btn">Jの内容1</button>
-                    <button class="dropdown-btn">Jの内容2</button>
-                  </div>
-                </details>
-              </div>
+            <ul>閲覧リスト</ul>
+            
+            <details class="dropdown">
+                <summary>R メニュー</summary>
+                <div class="dropdown-content">
+                <button class="dropdown-btn">Rの内容1</button>
+                <button class="dropdown-btn">Rの内容2</button>
+                </div>
+            </details>
+            
+            <details class="dropdown">
+                <summary>S メニュー</summary>
+                <div class="dropdown-content">
+                <button class="dropdown-btn">Sの内容1</button>
+                <button class="dropdown-btn">Sの内容2</button>
+                </div>
+            </details>
+            
+            <details class="dropdown">
+                <summary>J メニュー</summary>
+                <div class="dropdown-content">
+                <button class="dropdown-btn">Jの内容1</button>
+                <button class="dropdown-btn">Jの内容2</button>
+                </div>
+            </details>
+            </div>
         </div>
-      </div>
-      <div class="content">
+    </div>
+    <div class="content">
         <div class="center-box">
             <div class="button-group">
                 <button>▲</button>
                 <button>▼</button>
-              </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+    </div>
+</div>
 </body>
 </html>
