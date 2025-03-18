@@ -14,7 +14,7 @@ Route::get('/', function () {
 
 Route::get('/poster_list', function () {
     if (!session()->has('class_id')) {
-        return redirect('/login');
+        return redirect('login');
     }
 
     return view('poster_list');

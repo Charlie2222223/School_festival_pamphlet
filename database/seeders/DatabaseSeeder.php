@@ -2,30 +2,31 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Classes;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        for ($i = 1; $i <= 20; $i++) {
-            Classes::create([
-                'class_name' => "クラス{$i}",
-                'password' => Hash::make("password{$i}"),
-                'shop_name' => "ショップ{$i}",
-                'class_room' => "Room " . (100 + $i),
-                'comment' => "これはクラス{$i}のテストデータです。",
-                'image_path' => "image{$i}.jpg",
-                'html_code' => "<div>HTML content {$i}</div>",
-                'css_code' => "div { color: hsl(" . ($i * 18) . ", 70%, 50%); }",
-                'js_code' => "console.log('Hello JS {$i}');",
-            ]);
+        $types = ['R', 'J', 'S'];
+
+        foreach ($types as $type) {
+            for ($i = 1; $i <= 7; $i++) {
+                $index = "{$type}{$i}";
+                Classes::create([
+                    'class_name' => "{$type}クラス{$i}",
+                    'password' => Hash::make("password{$index}"),
+                    'shop_name' => "{$type}ショップ{$i}",
+                    'class_room' => "Room " . rand(100, 999),
+                    'comment' => "{$type}クラス{$i}のテストデータです。",
+                    'image_path' => "{$type}_image{$i}.jpg",
+                    'html_code' => "<div>{$type} HTML content {$i}</div>",
+                    'css_code' => "div { color: hsl(" . rand(0, 360) . ", 70%, 50%); }",
+                    'js_code' => "console.log('Hello {$type} JS {$i}');",
+                ]);
+            }
         }
     }
 }
