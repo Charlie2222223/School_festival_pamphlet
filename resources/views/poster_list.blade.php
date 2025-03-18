@@ -32,24 +32,35 @@
                 <details class="dropdown">
                     <summary>R メニュー<span>▼</span></summary>
                     <div class="dropdown-content">
-                    <div class="dropdown-text" onclick="alert('Rの内容1')">Rの内容1</div>
-                    <div class="dropdown-text" onclick="alert('Rの内容2')">Rの内容2</div>
+                        @foreach ($rClasses as $class)
+                        <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
+                            {{ $class->class_name }}
+                        </div>
+                        @endforeach
                     </div>
-                </details>
-                <details class="dropdown">
+                    </details>
+                    
+                    <details class="dropdown">
                     <summary>S メニュー<span>▼</span></summary>
                     <div class="dropdown-content">
-                    <div class="dropdown-text" onclick="alert('Sの内容1')">Sの内容1</div>
-                    <div class="dropdown-text" onclick="alert('Sの内容2')">Sの内容2</div>
+                        @foreach ($sClasses as $class)
+                        <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
+                            {{ $class->class_name }}
+                        </div>
+                        @endforeach
                     </div>
-                </details>
-                <details class="dropdown">
+                    </details>
+                    
+                    <details class="dropdown">
                     <summary>J メニュー<span>▼</span></summary>
                     <div class="dropdown-content">
-                    <div class="dropdown-text" onclick="alert('Jの内容1')">Jの内容1</div>
-                    <div class="dropdown-text" onclick="alert('Jの内容2')">Jの内容2</div>
+                        @foreach ($jClasses as $class)
+                        <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
+                            {{ $class->class_name }}
+                        </div>
+                        @endforeach
                     </div>
-                </details>
+                    </details>
                 </div>
             </div>
             
