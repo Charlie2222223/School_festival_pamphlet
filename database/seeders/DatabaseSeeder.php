@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Classes;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 20; $i++) {
             Classes::create([
                 'class_name' => "クラス{$i}",
-                'password' => "password{$i}",
+                'password' => Hash::make("password{$i}"),
                 'shop_name' => "ショップ{$i}",
                 'class_room' => "Room " . (100 + $i),
                 'comment' => "これはクラス{$i}のテストデータです。",

@@ -105,9 +105,10 @@
   <canvas id="myCanvas"></canvas>
   <div class="form-container">
     <h1>JOHO祭</h1>
-    <form method="POST" action="{{ route('login.submit') }}"">
-      <input type="text" placeholder="クラス" required />
-      <input type="password" placeholder="password" required />
+    <form method="POST" action="{{ route('login.submit') }}">
+      @csrf
+      <input type="text" name="class_name" placeholder="クラス" required />
+      <input type="password" name="password" placeholder="password" required />
       <button type="submit">login</button>
     </form>
   </div>
