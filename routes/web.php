@@ -11,6 +11,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('login');
-});
+})->name('login.page');;
 
 Route::get('/poster_list', [PosterListController::class, 'index']);
