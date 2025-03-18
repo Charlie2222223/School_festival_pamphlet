@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 20; $i++) {
             Classes::create([
                 'class_name' => "クラス{$i}",
-                'password' => bcrypt("password{$i}"),
+                'password' => "password{$i}",
                 'shop_name' => "ショップ{$i}",
                 'class_room' => "Room " . (100 + $i),
                 'comment' => "これはクラス{$i}のテストデータです。",

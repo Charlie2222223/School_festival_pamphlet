@@ -9,5 +9,13 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
+});
+
+Route::get('/poster_list', function () {
+    if (!session()->has('class_id')) {
+        return redirect('/login');
+    }
+
+    return view('poster_list');
 });
