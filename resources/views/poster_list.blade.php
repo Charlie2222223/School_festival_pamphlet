@@ -191,99 +191,103 @@
     border: 8px solid green;
     }
 
-.center-box {
-    width: 42%;
-    height: 80%;
-    /* margin-left: 5%; */
-    background-color: white;
-    border: 2px solid black;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-    font-size: 24px;
-    color: #00cccc;
-    font-weight: bold;
-    text-align: center;
-    z-index: 3;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .center-box {
+        width: 42%;
+        height: 80%;
+        /* margin-left: 5%; */
+        background-color: white;
+        border: 2px solid black;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        font-size: 24px;
+        color: #00cccc;
+        font-weight: bold;
+        text-align: center;
+        z-index: 3;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative; /* ★ ここを追加 */
-}
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative; /* ★ ここを追加 */
+    }
 
-.button-group {
-    position: absolute;
-    right: -40%;
-    top: 60%;
-    transform: translateY(-50%);
-    display: block;
-    flex-direction: column;
-    gap: 12px;
-}
+    .button-group {
+        position: absolute;
+        right: -40%;
+        top: 60%;
+        transform: translateY(-50%);
+        display: block;
+        flex-direction: column;
+        gap: 12px;
+    }
 
-.button-group button {
-    width: 60px;
-    height: 60px;
-    font-size: 40px;
-    background-color: #00cccc;
-    color: white;
-    border: none;
-    border-radius: 8px;
+    .button-group button {
+        width: 60px;
+        height: 60px;
+        font-size: 40px;
+        background-color: #00cccc;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s;
+    }
+
+    .button-group button:hover {
+        background-color: #009999;
+    }
+
+    .dropdown {
+        width: 77%;
+        margin: 1rem auto;
+        padding: 0.4rem 1rem;
+        font-size: 18px;
+        font-weight: bold;
+        color: #00fe19;
+        background-color: #ffffff;
+        border: 2px solid #00fe19;
+        border-radius: 6px;
+    }
+
+    .dropdown summary {
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    transition: background 0.3s;
-}
+    list-style: none;
+    user-select: none;
+    }
 
-.button-group button:hover {
-    background-color: #009999;
-}
+    .dropdown[open] summary {
+    border-bottom: 1px solid #00fe19;
+    }
 
-.dropdown {
-width: 77%;
-margin: 1rem auto;
-padding: 0.4rem 1rem;
-font-size: 18px;
-font-weight: bold;
-color: #00fe19;
-background-color: #ffffff;
-border: 2px solid #00fe19;
-border-radius: 6px;
-}
+    .dropdown span {
+        margin-left: 58%;
+    }
 
-.dropdown summary {
-cursor: pointer;
-list-style: none;
-user-select: none;
-}
+    .dropdown-content {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    }
 
-.dropdown[open] summary {
-border-bottom: 1px solid #00fe19;
-}
+    .dropdown-text {
+    padding: 0.5rem;
+    font-size: 16px;
+    color: #00fe19;
+    cursor: pointer;
+    text-align: right;
+    transition: background-color 0.2s;
+    }
 
-.dropdown-content {
-margin-top: 0.5rem;
-display: flex;
-flex-direction: column;
-gap: 0.5rem;
-}
-
-.dropdown-btn {
-width: 100%;
-padding: 0.5rem;
-font-size: 16px;
-background-color: #f8f8f8;
-border: 1px solid #ccc;
-border-radius: 4px;
-text-align: left;
-cursor: pointer;
-}
-.dropdown-btn:hover {
-background-color: #e0f8f0;
-}
+    .dropdown-text:hover {
+    background-color: #e0f8f8;
+    text-decoration: underline;
+    }
 
 </style>
 
@@ -312,28 +316,28 @@ background-color: #e0f8f0;
             <ul>閲覧リスト</ul>
             
             <details class="dropdown">
-                <summary>R メニュー</summary>
+                <summary>R メニュー<span>▼</span></summary>
                 <div class="dropdown-content">
-                <button class="dropdown-btn">Rの内容1</button>
-                <button class="dropdown-btn">Rの内容2</button>
+                  <div class="dropdown-text" onclick="alert('Rの内容1')">Rの内容1</div>
+                  <div class="dropdown-text" onclick="alert('Rの内容2')">Rの内容2</div>
                 </div>
-            </details>
-            
-            <details class="dropdown">
-                <summary>S メニュー</summary>
+              </details>
+              
+              <details class="dropdown">
+                <summary>S メニュー<span>▼</span></summary>
                 <div class="dropdown-content">
-                <button class="dropdown-btn">Sの内容1</button>
-                <button class="dropdown-btn">Sの内容2</button>
+                  <div class="dropdown-text" onclick="alert('Sの内容1')">Sの内容1</div>
+                  <div class="dropdown-text" onclick="alert('Sの内容2')">Sの内容2</div>
                 </div>
-            </details>
-            
-            <details class="dropdown">
-                <summary>J メニュー</summary>
+              </details>
+              
+              <details class="dropdown">
+                <summary>J メニュー<span>▼</span></summary>
                 <div class="dropdown-content">
-                <button class="dropdown-btn">Jの内容1</button>
-                <button class="dropdown-btn">Jの内容2</button>
+                  <div class="dropdown-text" onclick="alert('Jの内容1')">Jの内容1</div>
+                  <div class="dropdown-text" onclick="alert('Jの内容2')">Jの内容2</div>
                 </div>
-            </details>
+              </details>
             </div>
         </div>
     </div>
