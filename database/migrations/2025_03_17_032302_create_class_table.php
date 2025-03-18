@@ -19,7 +19,11 @@ return new class extends Migration
             $table->string('class_room');
             $table->text('comment')->nullable();
             $table->string('image_path')->nullable();
-            $table->longText('text_code')->nullable(); // ← HTMLコードは長文想定なら longTextが安心
+    
+            $table->longText('html_code')->nullable();
+            $table->longText('css_code')->nullable(); 
+            $table->longText('js_code')->nullable();  
+    
             $table->timestamps();
         });
     }

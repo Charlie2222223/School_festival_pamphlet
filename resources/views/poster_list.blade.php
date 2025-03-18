@@ -60,6 +60,9 @@
         box-sizing: border-box;
         border: 3px solid black;
         z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .icon {
@@ -116,6 +119,13 @@
         border: 2px solid #00fe19;
     }
 
+    .work:hover {
+        background-color: #eaffea;
+        border-color: #00cc66;
+        color: #00cc66;
+        transition: all 0.2s ease;
+    }
+
     .work img {
         width: 24px;
         height: 24px;
@@ -139,6 +149,15 @@
         border: 2px solid #00cccc;
     }
 
+
+    .home:hover {
+        background-color: #e6f9ff;
+        border-color: #00aaaa;
+        color: #00aaaa;
+        transition: all 0.2s ease;
+    }
+
+
     .home img {
         width: 24px;
         height: 24px;
@@ -161,6 +180,14 @@
         background-color: #ffffff;
         text-align: center;
         border: 2px solid #00fe19;
+    }
+
+    
+    .division:hover {
+        background-color: #eaffea;
+        border-color: #00cc66;
+        color: #00cc66;
+        transition: all 0.2s ease;
     }
 
 
@@ -264,6 +291,13 @@
         border-bottom: 1px solid #00fe19;
     }
 
+
+    .dropdown summary:hover {
+        background-color: #f0fdf6;
+        color: #00cc66;
+        transition: all 0.2s ease;
+    }
+
     .dropdown span {
         margin-left: 58%;
     }
@@ -289,6 +323,32 @@
         text-decoration: underline;
     }
 
+    .logout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 1rem;
+        padding: 0.8rem;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        background-color: #ff4d4d;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .logout:hover {
+    background-color: #cc0000;
+    }
+
+    .logout img {
+        width: 20px;
+        height: 20px;
+    }
+
 </style>
 
 </head>
@@ -297,50 +357,53 @@
     <canvas id="myCanvas"></canvas>
     <div class="app">
         <div class="main">
-            <div class="sidebar">
+        <div class="sidebar">
+            <div class="sidebar-top">
                 <div class="icon">
-                    <div class="icon_circle"></div>
-                    <p>R3SB</p>
+                <div class="icon_circle"></div>
+                <p>R3SB</p>
                 </div>
-                    <div class="list">
-                        <ul>作業リスト</ul>
-                        <button class="home">
-                            <img src="image/home.svg" alt="画像の説明">
-                            <span class="home-text">HOME</span>
-                        </button>
-                        <button class="work">
-                            <img src="image/icon.svg" alt="画像の説明">
-                            パンフレットを作成
-                        </button>
-                        <div class="list">
-                            <ul>閲覧リスト</ul>
-                            
-                            <details class="dropdown">
-                                <summary>R メニュー<span>▼</span></summary>
-                                <div class="dropdown-content">
-                                <div class="dropdown-text" onclick="alert('Rの内容1')">Rの内容1</div>
-                                <div class="dropdown-text" onclick="alert('Rの内容2')">Rの内容2</div>
-                                </div>
-                            </details>
-                            
-                            <details class="dropdown">
-                                <summary>S メニュー<span>▼</span></summary>
-                                <div class="dropdown-content">
-                                <div class="dropdown-text" onclick="alert('Sの内容1')">Sの内容1</div>
-                                <div class="dropdown-text" onclick="alert('Sの内容2')">Sの内容2</div>
-                                </div>
-                            </details>
-                            
-                            <details class="dropdown">
-                                <summary>J メニュー<span>▼</span></summary>
-                                <div class="dropdown-content">
-                                <div class="dropdown-text" onclick="alert('Jの内容1')">Jの内容1</div>
-                                <div class="dropdown-text" onclick="alert('Jの内容2')">Jの内容2</div>
-                                </div>
-                            </details>
-                        </div>
+                <div class="list">
+                <ul>作業リスト</ul>
+                <button class="home">
+                    <img src="image/home.svg" alt="画像の説明">
+                    <span class="home-text">HOME</span>
+                </button>
+                <button class="work">
+                    <img src="image/icon.svg" alt="画像の説明">
+                    パンフレットを作成
+                </button>
+                <ul>閲覧リスト</ul>
+                <details class="dropdown">
+                    <summary>R メニュー<span>▼</span></summary>
+                    <div class="dropdown-content">
+                    <div class="dropdown-text" onclick="alert('Rの内容1')">Rの内容1</div>
+                    <div class="dropdown-text" onclick="alert('Rの内容2')">Rの内容2</div>
                     </div>
+                </details>
+                <details class="dropdown">
+                    <summary>S メニュー<span>▼</span></summary>
+                    <div class="dropdown-content">
+                    <div class="dropdown-text" onclick="alert('Sの内容1')">Sの内容1</div>
+                    <div class="dropdown-text" onclick="alert('Sの内容2')">Sの内容2</div>
+                    </div>
+                </details>
+                <details class="dropdown">
+                    <summary>J メニュー<span>▼</span></summary>
+                    <div class="dropdown-content">
+                    <div class="dropdown-text" onclick="alert('Jの内容1')">Jの内容1</div>
+                    <div class="dropdown-text" onclick="alert('Jの内容2')">Jの内容2</div>
+                    </div>
+                </details>
                 </div>
+            </div>
+            
+            <!-- ログアウトボタンは下に -->
+            <button class="logout">
+                <img src="image/logout.png" alt="logout">
+                ログアウト
+            </button>
+            </div>
         <div class="content">
             <div class="center-box">
                 <div class="button-group">
