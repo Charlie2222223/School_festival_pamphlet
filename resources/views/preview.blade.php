@@ -100,7 +100,10 @@
         <textarea id="cssEditor" style="display: none;"></textarea>
         <textarea id="jsEditor" style="display: none;"></textarea>
       </div>
-    </div>ss
+
+      <div class="editor-bottom-box">ここに何か表示する内容（任意）</div>
+    </div>
+
   </div>
 
   <script>
