@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('welcome'); // login.blade.php を表示
+        return view('login'); // login.blade.php を表示
     }
 
     public function login(Request $request)

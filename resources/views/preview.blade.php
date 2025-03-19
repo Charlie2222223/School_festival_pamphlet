@@ -89,15 +89,17 @@
     </div>
 
     <div class="editor">
-      <div style="display: flex; justify-content: center; gap: 1rem; margin: 0.5rem;">
-        <button onclick="switchEditor('html')">HTML</button>
+      <div class="editor-tab-buttons">
+        <button onclick="switchEditor('html')" style="margin-left: 3%;">HTML</button>
         <button onclick="switchEditor('css')">CSS</button>
         <button onclick="switchEditor('js')">JavaScript</button>
       </div>
 
-      <textarea id="htmlEditor"></textarea>
-      <textarea id="cssEditor" style="display: none;"></textarea>
-      <textarea id="jsEditor" style="display: none;"></textarea>
+      <div class="code_editor">
+        <textarea id="htmlEditor"></textarea>
+        <textarea id="cssEditor" style="display: none;"></textarea>
+        <textarea id="jsEditor" style="display: none;"></textarea>
+      </div>
     </div>ss
   </div>
 
