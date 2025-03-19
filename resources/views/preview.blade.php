@@ -101,8 +101,19 @@
         <textarea id="jsEditor" style="display: none;"></textarea>
       </div>
 
-      <div class="editor-bottom-box">ここに何か表示する内容（任意）</div>
-    </div>
+      <div class="editor-bottom-wrapper">
+        <div class="editor-bottom-box">
+          <span>画像はありません</span>
+        </div>
+      
+        <label class="upload-btn">
+          アップロードフォーム
+          <input type="file" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+          <div class="upload-progress-container">
+            <div class="upload-progress-bar" id="uploadProgressBar"></div>
+          </div>
+        </label>
+      </div>
 
   </div>
 
@@ -204,6 +215,14 @@
       switchEditor('html'); // HTMLを最初に表示
       updatePreview(); // 初期表示更新
     });
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        alert(`選択された画像: ${file.name}`);
+        // 必要に応じて画像の表示処理などを追加可能
+      }
+    }
   </script>
 
 </body>

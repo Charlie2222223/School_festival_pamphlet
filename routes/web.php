@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PosterListController;
 use App\Http\Controllers\PreviewController;
+use App\Http\Controllers\ImageUploadController;
+
+Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('upload.image');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
