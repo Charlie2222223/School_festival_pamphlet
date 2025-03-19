@@ -15,4 +15,4 @@ Route::get('/', function () {
 })->name('login.page');;
 
 Route::get('/poster_list', [PosterListController::class, 'index']);
-Route::get('/preview', [PreViewController::class, 'index']);
+Route::get('/preview', [PreViewController::class, 'index'])->name('preview.page');

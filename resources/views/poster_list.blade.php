@@ -29,7 +29,7 @@
                 <img src="image/home.svg" alt="画像の説明">
                 <span class="home-text">HOME</span>
                 </button>
-                <button class="work">
+                <button onclick="location.href='{{ route('preview.page') }}'" class="work">
                 <img src="image/icon.svg" alt="画像の説明">
                 パンフレットを作成
                 </button>
