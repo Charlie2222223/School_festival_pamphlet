@@ -18,8 +18,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
+
+  <script>
+    const imageUploadRoute = "{{ route('image.upload') }}";
+    const csrfToken = "{{ csrf_token() }}";
+  </script>
+  
 </head>
-<body>
+<body data-class-id="{{ session('class_id') }}" data-class-name="{{ session('class_name') }}">
   <div class="background-pattern"></div>
   <canvas id="myCanvas"></canvas>
   <div class="main">
@@ -102,128 +108,231 @@
       </div>
 
       <div class="editor-bottom-wrapper">
-        <div class="editor-bottom-box">
-          <span>画像はありません</span>
+        <div class="editor-bottom-box" id="imageDisplayBox">
+          @if($uploadedImages->count())
+            <form id="deleteImageForm">
+              <ul>
+                @foreach($uploadedImages as $image)
+                  <li>
+                    <label>
+                      <input type="checkbox" name="image_ids[]" value="{{ $image->id }}">
+                      {{ $image->filename }}
+                    </label>
+                  </li>
+                @endforeach
+              </ul>
+                <button type="button" id="deleteSelectedImagesBtn" class="delete-button">
+                  取り消し
+                </button>
+            </form>
+          @else
+            <span id="imageStatusText">画像はありません</span>
+          @endif
         </div>
       
-        <label class="upload-btn">
-          アップロードフォーム
-          <input type="file" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
-          <div class="upload-progress-container">
-            <div class="upload-progress-bar" id="uploadProgressBar"></div>
-          </div>
-        </label>
+        <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
+          <label class="upload-btn">
+            <span class="upload-text">アップロードフォーム</span>
+            <input type="file" accept="image/*" name="image" id="imageInput">
+            <div class="upload-progress-container inside-btn">
+              <div class="upload-progress-bar" id="uploadProgressBar"></div>
+            </div>
+          </label>
+        </form>
+      </div>
+
+      <div class="save-button-wrapper">
+        <button id="saveCodeButton" class="save-button">コードを保存</button>
       </div>
 
   </div>
 
   <script>
-    function autoCloseTag(cm, ch) {
-      const cursor = cm.getCursor();
-      const token = cm.getTokenAt(cursor);
-      if (ch === '>') {
-        const line = cm.getLine(cursor.line);
-        const beforeCursor = line.slice(0, cursor.ch);
-        const match = beforeCursor.match(/<([a-zA-Z0-9]+)>$/);
-        if (match) {
-          const tagName = match[1];
-          const closeTag = `</${tagName}>`;
-          cm.replaceRange(closeTag, cursor);
-          cm.setCursor(cursor);
-        }
+document.addEventListener("DOMContentLoaded", function () {
+  const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
+    mode: "htmlmixed",
+    lineNumbers: true,
+    autoCloseTags: false,
+    theme: "monokai",
+    extraKeys: {
+      "'>'": function (cm) {
+        cm.replaceSelection('>');
+        autoCloseTag(cm, '>');
+        updatePreview();
       }
     }
-  
-    const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
-      mode: "htmlmixed",
-      lineNumbers: true,
-      autoCloseTags: false,
-      theme: "monokai", // ← ★ここ追加！
-      extraKeys: {
-        "'>'": function(cm) {
-          cm.replaceSelection('>');
-          autoCloseTag(cm, '>');
-          updatePreview();
-        }
-      }
-    });
+  });
 
-    const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
-      mode: "css",
-      lineNumbers: true,
-      theme: "monokai", // ← ★ここ追加！
-    });
+  const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+    mode: "css",
+    lineNumbers: true,
+    theme: "monokai"
+  });
 
-    const jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
-      mode: "javascript",
-      lineNumbers: true,
-      theme: "monokai", // ← ★ここ追加！
-    });
-  
-    // ✅ 初期コードをそれぞれ設定
-    htmlEditor.setValue(
-  `<!DOCTYPE html>
-  <html>
-  <head>
-    <title>サンプルページ</title>
-  </head>
-  <body>
-    <h1>Hello World</h1>
-    <p>これはHTMLの初期テンプレートです。</p>
-  </body>
-  </html>`
-    );
-  
-    cssEditor.setValue(
-  `body {
-    color: #333;
-    font-family: sans-serif;
+  const jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
+    mode: "javascript",
+    lineNumbers: true,
+    theme: "monokai"
+  });
+
+  htmlEditor.on('change', () => updatePreview());
+  cssEditor.on('change', () => updatePreview());
+  jsEditor.on('change', () => updatePreview());
+
+  htmlEditor.setValue(`<!DOCTYPE html>
+<html>
+<head>
+  <title>サンプルページ</title>
+</head>
+<body>
+  <h1>Hello World</h1>
+  <p>これはHTMLの初期テンプレートです。</p>
+</body>
+</html>`);
+
+  cssEditor.setValue(`body {
+  color: #333;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: #00cccc;
+}`);
+
+  jsEditor.setValue(`console.log("JavaScriptが実行されました！");
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("ページが読み込まれました");
+});`);
+
+  function autoCloseTag(cm, ch) {
+    const cursor = cm.getCursor();
+    const line = cm.getLine(cursor.line);
+    const beforeCursor = line.slice(0, cursor.ch);
+    const match = beforeCursor.match(/<([a-zA-Z0-9]+)>$/);
+    if (match) {
+      const tagName = match[1];
+      const closeTag = `</${tagName}>`;
+      cm.replaceRange(closeTag, cursor);
+      cm.setCursor(cursor);
+    }
   }
+
+  function switchEditor(type) {
+    htmlEditor.getWrapperElement().style.display = type === "html" ? "block" : "none";
+    cssEditor.getWrapperElement().style.display = type === "css" ? "block" : "none";
+    jsEditor.getWrapperElement().style.display = type === "js" ? "block" : "none";
+  }
+
+  window.switchEditor = switchEditor;
+
+  function updatePreview(imageTag = '') {
+  const html = htmlEditor.getValue();
+  const css = `<style>${cssEditor.getValue()}</style>`;
+  const js = `<script>${jsEditor.getValue()}<\/script>`;
+
+  // 一時的に imageTag を body に挿入する処理を改善
+  let finalHtml = html;
+
+  // imageTag が挿入済みの場合、重複を避けてクリーンに再生成
+  finalHtml = finalHtml.replace(/<img .*?>/, ''); // ← 前回の画像タグを除去（任意）
+
+  // <body> タグ内に imageTag を挿入する方法に変更（安全）
+
+  const content = `
+    ${finalHtml}
+    ${css}
+    ${js}
+  `;
+  document.getElementById('previewFrame').srcdoc = content;
+}
+
+  // 初期表示
+  switchEditor('html');
+  updatePreview();
+
+  // イメージアップロード処理
+  const imageInput = document.getElementById('imageInput');
+  const uploadForm = document.getElementById('uploadForm');
+  const progressBar = document.getElementById('uploadProgressBar');
+  const imageBox = document.getElementById('imageDisplayBox');
+  const statusText = document.getElementById('imageStatusText');
   
-  h1 {
-    color: #00cccc;
-  }`
-    );
-  
-    jsEditor.setValue(
-  `console.log("JavaScriptが実行されました！");
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("ページが読み込まれました");
-  });`
-    );
-  
-    function updatePreview() {
-      const html = htmlEditor.getValue();
-      const css = `<style>${cssEditor.getValue()}</style>`;
-      const js = `<script>${jsEditor.getValue()}<\/script>`;
-      const content = html + css + js;
-      document.getElementById('previewFrame').srcdoc = content;
-    }
-  
-    htmlEditor.on("change", updatePreview);
-    cssEditor.on("change", updatePreview);
-    jsEditor.on("change", updatePreview);
-  
-    function switchEditor(type) {
-      htmlEditor.getWrapperElement().style.display = type === "html" ? "block" : "none";
-      cssEditor.getWrapperElement().style.display = type === "css" ? "block" : "none";
-      jsEditor.getWrapperElement().style.display = type === "js" ? "block" : "none";
-    }
-  
-    window.addEventListener('DOMContentLoaded', () => {
-      switchEditor('html'); // HTMLを最初に表示
-      updatePreview(); // 初期表示更新
+  imageInput.addEventListener('change', function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const formData = new FormData(uploadForm);
+  formData.append('class_name', document.body.dataset.className); // ← class_name追加済み
+  formData.append('class_id', document.body.dataset.classId);     // ← ✅ これを追加！
+
+  const xhr = new XMLHttpRequest();
+    xhr.open('POST', imageUploadRoute, true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+    xhr.upload.addEventListener('progress', function (e) {
+      if (e.lengthComputable) {
+        const percent = (e.loaded / e.total) * 100;
+        progressBar.style.width = percent + '%';
+      }
     });
 
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        alert(`選択された画像: ${file.name}`);
-        // 必要に応じて画像の表示処理などを追加可能
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        if (response.success) {
+          statusText.style.display = 'none';
+          const img = document.createElement('img');
+          img.src = response.image_url;
+          img.style.maxWidth = '100%';
+          img.style.maxHeight = '100%';
+          imageBox.appendChild(img);
+          updatePreview(`<img src="${response.image_url}" alt="Uploaded Image" style="max-width: 100%;">`);
+        }
       }
+    };
+
+    xhr.send(formData);
+  });
+});
+
+document.getElementById('deleteSelectedImagesBtn').addEventListener('click', function () {
+  const checkedBoxes = document.querySelectorAll('input[name="image_ids[]"]:checked');
+  if (checkedBoxes.length === 0) {
+    alert('削除したい画像を選択してください。');
+    return;
+  }
+
+  if (!confirm('選択した画像を削除しますか？')) return;
+
+  const formData = new FormData();
+  checkedBoxes.forEach(box => {
+    formData.append('image_ids[]', box.value);
+  });
+  formData.append('_token', csrfToken);
+
+  fetch('{{ route('image.delete') }}', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // 削除した画像のliをDOMから消す
+      checkedBoxes.forEach(box => {
+        box.closest('li').remove();
+      });
+
+      // 全部なくなったら「画像はありません」を表示
+      if (document.querySelectorAll('#imageDisplayBox li').length === 0) {
+        document.getElementById('imageDisplayBox').innerHTML = '<span id="imageStatusText">画像はありません</span>';
+      }
+    } else {
+      alert('削除に失敗しました');
     }
-  </script>
+  });
+});
+</script>
 
 </body>
 </html>

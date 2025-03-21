@@ -20,19 +20,36 @@ body {
     background-color: white;
 }
 
-.editor {
+.upload-form {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;  
+    margin-top: 3%;
+}
+
+.upload-btn input[type="file"] {
+    display: none; /* ← ファイル選択のデフォルトボタン非表示 */
+}
+
+.editor {    
     width: 48%;
     height: 75vh;
     z-index: 2;
     margin-top: 10%;
     margin-right: 1%;
+    overflow: hidden; /* ← 親ははみ出し隠す */
 }
 
 .CodeMirror {
     height: 100%;
     font-size: 16px;
     z-index: 2;
+    flex-grow: 1;
+    overflow-x: auto !important;   
+    white-space: pre !important;   
 }
+
 
 .code_editor {
     flex-grow: 1;
@@ -95,6 +112,7 @@ iframe {
 }
 
 
+
 .editor-bottom-box {
     width: 55%;
     height: 200px;
@@ -106,15 +124,20 @@ iframe {
     margin-top: 3%;
     color: #333;
     display: flex;
+    position: relative; /* ← 追加 */
+    flex-direction: column; /* ← 内容を縦並びに */
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 3rem; /* ← ボタン分のスペース確保 */
 }
 
 .upload-btn {
     height: 10%;
-    width: 50%;
+    width:  89%;
     margin-top: 3%;
     background-color: #E8822A;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem 2.5rem; /* 下に余白追加でプログレスバーのスペース確保 */
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
@@ -150,6 +173,42 @@ iframe {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+}
+
+#imageDisplayBox ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.delete-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(255, 77, 77, 0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #e60000;
+    transform: scale(1.05);
+}
+
+.delete-button:active {
+    background-color: #cc0000;
+    transform: scale(0.98);
+}
+
+.delete-button:active {
+    transform: scale(0.98);
+    background-color: #cc0000;
 }
 
 .sidebar {
