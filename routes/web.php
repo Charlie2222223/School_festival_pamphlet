@@ -22,3 +22,5 @@ Route::get('/preview', [PreViewController::class, 'index'])->name('preview.page'
 Route::get('/preview', [PreviewController::class, 'previewPage'])->name('preview.page');
 Route::post('/image/delete', [ImageUploadController::class, 'delete'])->name('image.delete');
 Route::post('/code/save', [CodeController::class, 'save'])->name('code.save');
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

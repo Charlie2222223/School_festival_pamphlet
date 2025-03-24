@@ -34,9 +34,10 @@ class AuthController extends Controller
         return redirect('/poster_list'); // ログイン後の遷移先
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Session::flush(); // セッション削除
-        return redirect('/');
+        $request->session()->flush(); // セッションを全て削除
+        return redirect()->route('login.page'); // ログインページへリダイレクト
     }
+    
 }

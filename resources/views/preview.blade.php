@@ -88,9 +88,9 @@
         </div>
       </div>
 
-      <button class="logout">
+      <button onclick="location.href='{{ route('logout') }}'" class="logout">
         <img src="image/logout.png" alt="logout">ログアウト
-      </button>
+    </button>
     </div>
 
     <!-- エディタとプレビューエリア -->
