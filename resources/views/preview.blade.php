@@ -138,18 +138,16 @@
               <div class="upload-progress-bar" id="uploadProgressBar"></div>
             </div>
           </label>
+          <div class="save-button-wrapper">
+            <button id="saveCodeButton" class="save-button">コードを保存</button>
+          </div>
         </form>
       </div>
-
-      <div class="save-button-wrapper">
-        <button id="saveCodeButton" class="save-button">コードを保存</button>
-      </div>
-
   </div>
 
   <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
+  window.htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
     mode: "htmlmixed",
     lineNumbers: true,
     autoCloseTags: false,
@@ -163,13 +161,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+  window.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
     mode: "css",
     lineNumbers: true,
     theme: "monokai"
   });
 
-  const jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
+  window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
     mode: "javascript",
     lineNumbers: true,
     theme: "monokai"
@@ -330,6 +328,46 @@ document.getElementById('deleteSelectedImagesBtn').addEventListener('click', fun
     } else {
       alert('削除に失敗しました');
     }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // ...（CodeMirror初期化など）
+
+  // コード保存ボタン処理
+  const saveButton = document.getElementById("saveCodeButton");
+
+  saveButton.addEventListener("click", function (e) {
+    e.preventDefault(); // フォーム送信防止（画像アップロードと混ざらないように）
+
+    // CodeMirrorの内容取得
+    const html = window.htmlEditor.getValue();
+    const css  = window.cssEditor.getValue();
+    const js   = window.jsEditor.getValue();
+
+    // データ送信
+    const formData = new FormData();
+    formData.append('_token', csrfToken); // CSRF対策
+    formData.append('html', html);
+    formData.append('css', css);
+    formData.append('js', js);
+
+    fetch("{{ route('code.save') }}", {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("コードが保存されました！");
+      } else {
+        alert("保存に失敗しました：" + (data.message || ''));
+      }
+    })
+    .catch(error => {
+      console.error("保存エラー:", error);
+      alert("保存中にエラーが発生しました。");
+    });
   });
 });
 </script>
