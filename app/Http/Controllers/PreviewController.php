@@ -44,6 +44,26 @@ class PreviewController extends Controller
             'sClasses' => $sClasses,
             'jClasses' => $jClasses,
             'class_name' => $class_name,
+            // 追加: 保存済みコード
+            'html_code' => $class?->html_code,
+            'css_code'  => $class?->css_code,
+            'js_code'   => $class?->js_code,
+        ]);
+    }
+
+    public function showPreview()
+    {
+        $classId = session('class_id');
+        $class = Classes::find($classId);
+
+        return view('preview', [
+            'uploadedImages' => $class->uploadedImages ?? [],
+            'html_code' => $class->html_code,
+            'css_code'  => $class->css_code,
+            'js_code'   => $class->js_code,
+            'rClasses'  => Classes::where('division', 'R')->get(),
+            'sClasses'  => Classes::where('division', 'S')->get(),
+            'jClasses'  => Classes::where('division', 'J')->get(),
         ]);
     }
     

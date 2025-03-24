@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('login');
 })->name('login.page');;
 
-Route::get('/poster_list', [PosterListController::class, 'index']);
+Route::get('/poster_list', [PosterListController::class, 'index'])->name('poster.page');;;
 Route::get('/preview', [PreViewController::class, 'index'])->name('preview.page');
 Route::get('/preview', [PreviewController::class, 'previewPage'])->name('preview.page');
 Route::post('/image/delete', [ImageUploadController::class, 'delete'])->name('image.delete');

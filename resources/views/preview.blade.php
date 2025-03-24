@@ -9,6 +9,10 @@
   <!-- CodeMirror CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/css-hint.min.js"></script>
 
   <!-- CodeMirror Core & Modes -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
@@ -40,7 +44,7 @@
       <div class="sidebar-scrollable">
         <div class="list">
           <ul>作業リスト</ul>
-          <button onclick="location.href='{{ route('login.page') }}'" class="home">
+          <button onclick="location.href='{{ route('poster.page') }}'" class="home">
             <img src="image/home.svg" alt="画像の説明">
             <span class="home-text">HOME</span>
           </button>
@@ -146,231 +150,227 @@
   </div>
 
   <script>
-document.addEventListener("DOMContentLoaded", function () {
-  window.htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
-    mode: "htmlmixed",
-    lineNumbers: true,
-    autoCloseTags: false,
-    theme: "monokai",
-    extraKeys: {
-      "'>'": function (cm) {
-        cm.replaceSelection('>');
-        autoCloseTag(cm, '>');
-        updatePreview();
-      }
-    }
-  });
+    const baseUrl = "{{ asset('storage/uploads/' . session('class_name')) }}/";
 
-  window.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
-    mode: "css",
-    lineNumbers: true,
-    theme: "monokai"
-  });
-
-  window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
-    mode: "javascript",
-    lineNumbers: true,
-    theme: "monokai"
-  });
-
-  htmlEditor.on('change', () => updatePreview());
-  cssEditor.on('change', () => updatePreview());
-  jsEditor.on('change', () => updatePreview());
-
-  htmlEditor.setValue(`<!DOCTYPE html>
-<html>
-<head>
-  <title>サンプルページ</title>
-</head>
-<body>
-  <h1>Hello World</h1>
-  <p>これはHTMLの初期テンプレートです。</p>
-</body>
-</html>`);
-
-  cssEditor.setValue(`body {
-  color: #333;
-  font-family: sans-serif;
-}
-
-h1 {
-  color: #00cccc;
-}`);
-
-  jsEditor.setValue(`console.log("JavaScriptが実行されました！");
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("ページが読み込まれました");
-});`);
-
-  function autoCloseTag(cm, ch) {
-    const cursor = cm.getCursor();
-    const line = cm.getLine(cursor.line);
-    const beforeCursor = line.slice(0, cursor.ch);
-    const match = beforeCursor.match(/<([a-zA-Z0-9]+)>$/);
-    if (match) {
-      const tagName = match[1];
-      const closeTag = `</${tagName}>`;
-      cm.replaceRange(closeTag, cursor);
-      cm.setCursor(cursor);
-    }
-  }
-
-  function switchEditor(type) {
-    htmlEditor.getWrapperElement().style.display = type === "html" ? "block" : "none";
-    cssEditor.getWrapperElement().style.display = type === "css" ? "block" : "none";
-    jsEditor.getWrapperElement().style.display = type === "js" ? "block" : "none";
-  }
-
-  window.switchEditor = switchEditor;
-
-  function updatePreview(imageTag = '') {
-  const html = htmlEditor.getValue();
-  const css = `<style>${cssEditor.getValue()}</style>`;
-  const js = `<script>${jsEditor.getValue()}<\/script>`;
-
-  // 一時的に imageTag を body に挿入する処理を改善
-  let finalHtml = html;
-
-  // imageTag が挿入済みの場合、重複を避けてクリーンに再生成
-  finalHtml = finalHtml.replace(/<img .*?>/, ''); // ← 前回の画像タグを除去（任意）
-
-  // <body> タグ内に imageTag を挿入する方法に変更（安全）
-
-  const content = `
-    ${finalHtml}
-    ${css}
-    ${js}
-  `;
-  document.getElementById('previewFrame').srcdoc = content;
-}
-
-  // 初期表示
-  switchEditor('html');
-  updatePreview();
-
-  // イメージアップロード処理
-  const imageInput = document.getElementById('imageInput');
-  const uploadForm = document.getElementById('uploadForm');
-  const progressBar = document.getElementById('uploadProgressBar');
-  const imageBox = document.getElementById('imageDisplayBox');
-  const statusText = document.getElementById('imageStatusText');
+    document.addEventListener("DOMContentLoaded", function () {
+      // CodeMirror 初期化
+      window.htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
+        mode: "htmlmixed",
+        lineNumbers: true,
+        autoCloseTags: false,
+        theme: "monokai",
+        extraKeys: {
+          "'>'": function (cm) {
+            cm.replaceSelection('>');
+            autoCloseTag(cm, '>');
+            updatePreview();
+          }
+        }
+      });
   
-  imageInput.addEventListener('change', function () {
-  const file = this.files[0];
-  if (!file) return;
-
-  const formData = new FormData(uploadForm);
-  formData.append('class_name', document.body.dataset.className); // ← class_name追加済み
-  formData.append('class_id', document.body.dataset.classId);     // ← ✅ これを追加！
-
-  const xhr = new XMLHttpRequest();
-    xhr.open('POST', imageUploadRoute, true);
-    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-
-    xhr.upload.addEventListener('progress', function (e) {
-      if (e.lengthComputable) {
-        const percent = (e.loaded / e.total) * 100;
-        progressBar.style.width = percent + '%';
+      window.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+        mode: "css",
+        lineNumbers: true,
+        theme: "monokai",
+        extraKeys: {"Ctrl-Space": "autocomplete"} // Ctrl+Space で補完
+      });
+  
+      window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
+        mode: "javascript",
+        lineNumbers: true,
+        theme: "monokai"
+      });
+  
+      htmlEditor.on('change', updatePreview);
+      cssEditor.on('change', updatePreview);
+      jsEditor.on('change', updatePreview);
+  
+      // 保存済みのコードをセット（なければサンプル）
+      const htmlCode = `{!! addslashes($html_code ?? '') !!}`;
+      const cssCode  = `{!! addslashes($css_code ?? '') !!}`;
+      const jsCode   = `{!! addslashes($js_code ?? '') !!}`;
+  
+      htmlEditor.setValue(htmlCode.trim() !== '' ? htmlCode : `<!DOCTYPE html>
+  <html>
+  <head>
+    <base href="${baseUrl}">
+    <title>サンプルページ</title>
+  </head>
+  <body>
+    <meta charset="UTF-8">
+    <h1>Hello World</h1>
+    <p>これはHTMLの初期テンプレートです。</p>
+  </body>
+  </html>`);
+  
+      cssEditor.setValue(cssCode.trim() !== '' ? cssCode : `body {
+    color: #333;
+    font-family: sans-serif;
+  }
+  h1 {
+    color: #00cccc;
+  }`);
+  
+      jsEditor.setValue(jsCode.trim() !== '' ? jsCode : `console.log("JavaScriptが実行されました！");
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("ページが読み込まれました");
+  });`);
+  
+      switchEditor('html');
+      updatePreview();
+  
+      // 保存ボタン処理
+      const saveButton = document.getElementById("saveCodeButton");
+      if (saveButton) {
+        saveButton.addEventListener("click", function (e) {
+          e.preventDefault();
+  
+          const html = htmlEditor.getValue();
+          const css  = cssEditor.getValue();
+          const js   = jsEditor.getValue();
+  
+          const formData = new FormData();
+          formData.append('_token', csrfToken);
+          formData.append('html', html);
+          formData.append('css', css);
+          formData.append('js', js);
+  
+          fetch("{{ route('code.save') }}", {
+            method: 'POST',
+            body: formData
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert("コードが保存されました！");
+            } else {
+              alert("保存に失敗しました：" + (data.message || ''));
+            }
+          })
+          .catch(error => {
+            console.error("保存エラー:", error);
+            alert("保存中にエラーが発生しました。");
+          });
+        });
       }
-    });
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        if (response.success) {
-          statusText.style.display = 'none';
-          const img = document.createElement('img');
-          img.src = response.image_url;
-          img.style.maxWidth = '100%';
-          img.style.maxHeight = '100%';
-          imageBox.appendChild(img);
-          updatePreview(`<img src="${response.image_url}" alt="Uploaded Image" style="max-width: 100%;">`);
+  
+      // 画像アップロード処理
+      const imageInput = document.getElementById('imageInput');
+      const uploadForm = document.getElementById('uploadForm');
+      const progressBar = document.getElementById('uploadProgressBar');
+      const imageBox = document.getElementById('imageDisplayBox');
+      const statusText = document.getElementById('imageStatusText');
+  
+      if (imageInput) {
+        imageInput.addEventListener('change', function () {
+          const file = this.files[0];
+          if (!file) return;
+  
+          const formData = new FormData(uploadForm);
+          formData.append('class_name', document.body.dataset.className);
+          formData.append('class_id', document.body.dataset.classId);
+  
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', imageUploadRoute, true);
+          xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+  
+          xhr.upload.addEventListener('progress', function (e) {
+            if (e.lengthComputable) {
+              const percent = (e.loaded / e.total) * 100;
+              progressBar.style.width = percent + '%';
+            }
+          });
+  
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              if (response.success) {
+                statusText.style.display = 'none';
+                const img = document.createElement('img');
+                img.src = response.image_url;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                imageBox.appendChild(img);
+                updatePreview(`<img src="${response.image_url}" alt="Uploaded Image" style="max-width: 100%;">`);
+              }
+            }
+          };
+  
+          xhr.send(formData);
+        });
+      }
+  
+      // 削除ボタン処理（存在確認あり）
+      const deleteButton = document.getElementById('deleteSelectedImagesBtn');
+      if (deleteButton) {
+        deleteButton.addEventListener('click', function () {
+          const checkedBoxes = document.querySelectorAll('input[name="image_ids[]"]:checked');
+          if (checkedBoxes.length === 0) {
+            alert('削除したい画像を選択してください。');
+            return;
+          }
+  
+          if (!confirm('選択した画像を削除しますか？')) return;
+  
+          const formData = new FormData();
+          checkedBoxes.forEach(box => formData.append('image_ids[]', box.value));
+          formData.append('_token', csrfToken);
+  
+          fetch('{{ route('image.delete') }}', {
+            method: 'POST',
+            body: formData
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              checkedBoxes.forEach(box => {
+                box.closest('li').remove();
+              });
+  
+              if (document.querySelectorAll('#imageDisplayBox li').length === 0) {
+                imageBox.innerHTML = '<span id="imageStatusText">画像はありません</span>';
+              }
+            } else {
+              alert('削除に失敗しました');
+            }
+          });
+        });
+      }
+  
+      // エディタ切り替え関数
+      function switchEditor(type) {
+        htmlEditor.getWrapperElement().style.display = type === "html" ? "block" : "none";
+        cssEditor.getWrapperElement().style.display = type === "css" ? "block" : "none";
+        jsEditor.getWrapperElement().style.display = type === "js" ? "block" : "none";
+      }
+      window.switchEditor = switchEditor;
+  
+      // プレビュー更新関数
+      function updatePreview(imageTag = '') {
+        const html = htmlEditor.getValue();
+        const css = `<style>${cssEditor.getValue()}</style>`;
+        const js = `<script>${jsEditor.getValue()}<\/script>`;
+  
+        let finalHtml = html.replace(/<img .*?>/, '');
+        const content = `${finalHtml}${css}${js}`;
+        document.getElementById('previewFrame').srcdoc = content;
+      }
+  
+      // タグ自動閉じ補助関数
+      function autoCloseTag(cm, ch) {
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line);
+        const beforeCursor = line.slice(0, cursor.ch);
+        const match = beforeCursor.match(/<([a-zA-Z0-9]+)>$/);
+        if (match) {
+          const tagName = match[1];
+          const closeTag = `</${tagName}>`;
+          cm.replaceRange(closeTag, cursor);
+          cm.setCursor(cursor);
         }
       }
-    };
-
-    xhr.send(formData);
-  });
-});
-
-document.getElementById('deleteSelectedImagesBtn').addEventListener('click', function () {
-  const checkedBoxes = document.querySelectorAll('input[name="image_ids[]"]:checked');
-  if (checkedBoxes.length === 0) {
-    alert('削除したい画像を選択してください。');
-    return;
-  }
-
-  if (!confirm('選択した画像を削除しますか？')) return;
-
-  const formData = new FormData();
-  checkedBoxes.forEach(box => {
-    formData.append('image_ids[]', box.value);
-  });
-  formData.append('_token', csrfToken);
-
-  fetch('{{ route('image.delete') }}', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      // 削除した画像のliをDOMから消す
-      checkedBoxes.forEach(box => {
-        box.closest('li').remove();
-      });
-
-      // 全部なくなったら「画像はありません」を表示
-      if (document.querySelectorAll('#imageDisplayBox li').length === 0) {
-        document.getElementById('imageDisplayBox').innerHTML = '<span id="imageStatusText">画像はありません</span>';
-      }
-    } else {
-      alert('削除に失敗しました');
-    }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  // ...（CodeMirror初期化など）
-
-  // コード保存ボタン処理
-  const saveButton = document.getElementById("saveCodeButton");
-
-  saveButton.addEventListener("click", function (e) {
-    e.preventDefault(); // フォーム送信防止（画像アップロードと混ざらないように）
-
-    // CodeMirrorの内容取得
-    const html = window.htmlEditor.getValue();
-    const css  = window.cssEditor.getValue();
-    const js   = window.jsEditor.getValue();
-
-    // データ送信
-    const formData = new FormData();
-    formData.append('_token', csrfToken); // CSRF対策
-    formData.append('html', html);
-    formData.append('css', css);
-    formData.append('js', js);
-
-    fetch("{{ route('code.save') }}", {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert("コードが保存されました！");
-      } else {
-        alert("保存に失敗しました：" + (data.message || ''));
-      }
-    })
-    .catch(error => {
-      console.error("保存エラー:", error);
-      alert("保存中にエラーが発生しました。");
     });
-  });
-});
-</script>
+  </script>
 
 </body>
 </html>

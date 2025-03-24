@@ -22,9 +22,6 @@ class DatabaseSeeder extends Seeder
                     'class_room' => "Room " . rand(100, 999),
                     'comment' => "{$type}クラス{$i}のテストデータです。",
                     'image_path' => "{$type}_image{$i}.jpg",
-                    'html_code' => "<div>{$type} HTML content {$i}</div>",
-                    'css_code' => "div { color: hsl(" . rand(0, 360) . ", 70%, 50%); }",
-                    'js_code' => "console.log('Hello {$type} JS {$i}');",
                 ]);
             }
         }
