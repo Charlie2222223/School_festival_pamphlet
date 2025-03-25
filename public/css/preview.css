@@ -428,7 +428,6 @@ iframe {
 .center-box {
     width: 42%;
     height: 80%;
-    /* margin-left: 5%; */
     background-color: white;
     border: 1px solid black;
     border-radius: 12px;
@@ -446,7 +445,7 @@ iframe {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* ★ ここを追加 */
+    position: relative;
 }
 
 .button-group {

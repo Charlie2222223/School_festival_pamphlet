@@ -228,8 +228,8 @@ canvas {
 }
 
 .center-box {
-    width: 47%;
-    height: 90%;
+    width: 36vw;
+    height: 87%;
     background-color: white;
     border: 1px solid black;
     font-size: 24px;
@@ -238,14 +238,14 @@ canvas {
     text-align: center;
     z-index: 3;
     position: absolute;
-    top: 46%;
+    top: 47%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* ★ ここを追加 */
+    position: relative;
 }
 
 .button-group {
