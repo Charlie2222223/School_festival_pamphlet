@@ -228,8 +228,8 @@ canvas {
 }
 
 .center-box {
-    width: 42%;
-    height: 80%;
+    width: 47%;
+    height: 90%;
     background-color: white;
     border: 1px solid black;
     font-size: 24px;
@@ -238,7 +238,7 @@ canvas {
     text-align: center;
     z-index: 3;
     position: absolute;
-    top: 50%;
+    top: 46%;
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -250,8 +250,8 @@ canvas {
 
 .button-group {
     position: absolute;
-    right: -40%;
-    top: 50%;
+    right: -35%;
+    top: 55%;
     transform: translateY(-50%);
     display: block;
     flex-direction: column;

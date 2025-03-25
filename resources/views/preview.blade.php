@@ -7,21 +7,24 @@
   @vite('resources/js/three-app.ts')
 
   <!-- CodeMirror CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
+  <!-- CodeMirror CSS（順序：Core → Theme → Addon） -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
 
+<!-- CodeMirror Core（最初に必ず） -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+
+<!-- CodeMirror Modes（Coreの次に） -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+
+<!-- CodeMirror Addons（最後に） -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/css-hint.min.js"></script>
-
-  <!-- CodeMirror Core & Modes -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script> <!-- ←追加おすすめ -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
 
   <script>
     const imageUploadRoute = "{{ route('image.upload') }}";
@@ -191,17 +194,17 @@
       const jsCode   = `{!! addslashes($js_code ?? '') !!}`;
   
       htmlEditor.setValue(htmlCode.trim() !== '' ? htmlCode : `<!DOCTYPE html>
-  <html>
-  <head>
-    <base href="${baseUrl}">
-    <title>サンプルページ</title>
-  </head>
-  <body>
-    <meta charset="UTF-8">
-    <h1>Hello World</h1>
-    <p>これはHTMLの初期テンプレートです。</p>
-  </body>
-  </html>`);
+    <html>
+    <head>
+      <base href="${baseUrl}">
+      <meta charset="UTF-8">
+      <title>サンプルページ</title>
+    </head>
+    <body>
+      <h1>Hello World</h1>
+      <p>これはHTMLの初期テンプレートです。</p>
+    </body>
+    </html>`);
   
       cssEditor.setValue(cssCode.trim() !== '' ? cssCode : `body {
     color: #333;

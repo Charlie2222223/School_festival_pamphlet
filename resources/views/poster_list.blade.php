@@ -66,7 +66,7 @@
         </div>
 
         <div class="center-box">
-            <iframe id="previewFrame" style="width: 90%; height: 90%; border: none; overflow: auto;"></iframe>
+            <iframe id="previewFrame" style="width: 100%; height: 100%; border: none; overflow: auto;"></iframe>
         <div class="button-group">
             <button id="prevClass">▲</button>
             <button id="nextClass">▼</button>
