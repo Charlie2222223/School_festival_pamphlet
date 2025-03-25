@@ -425,29 +425,6 @@ iframe {
     border: 8px solid green;
 }
 
-.center-box {
-    width: 42%;
-    height: 80%;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-    font-size: 24px;
-    color: #00cccc;
-    font-weight: bold;
-    text-align: center;
-    z-index: 3;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
 .button-group {
     position: absolute;
     right: -40%;
