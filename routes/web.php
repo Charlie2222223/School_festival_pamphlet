@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('login');
 })->name('login.page');;
 
+Route::get('/poster', [AuthController::class, 'show_poster'])->name('poster');
+
 Route::get('/poster_list', [PosterListController::class, 'index'])->name('poster.page');;;
 Route::get('/preview', [PreViewController::class, 'index'])->name('preview.page');
 Route::get('/preview', [PreviewController::class, 'previewPage'])->name('preview.page');

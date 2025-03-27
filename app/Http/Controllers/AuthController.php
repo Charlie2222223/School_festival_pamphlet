@@ -34,6 +34,20 @@ class AuthController extends Controller
         return redirect('/poster_list'); // ログイン後の遷移先
     }
 
+    public function show_poster(){
+        $allClasses = Classes::all();
+        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
+        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
+        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
+    
+        return view('poster', [
+            'allClasses' => $allClasses,
+            'rClasses' => $rClasses,
+            'sClasses' => $sClasses,
+            'jClasses' => $jClasses,
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $request->session()->flush(); // セッションを全て削除
