@@ -19,7 +19,7 @@
       <input type="password" name="password" placeholder="password" required />
       <button class="login" type="submit">login</button>
     </form>
-    <button class="swich_development" id="development_button">閲覧者の方はこちら</button>
+    <button class="swich_development" id="development_button">パンフレット一覧</button>
   </div>
 
   <div class="form-container" id="watch">
