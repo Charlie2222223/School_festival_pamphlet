@@ -19,7 +19,7 @@
       <input type="password" name="password" placeholder="password" required />
       <button class="login" type="submit">login</button>
     </form>
-    <button class="swich_development" id="development_button">開発者の方はこちら</button>
+    <button class="swich_development" id="development_button">閲覧者の方はこちら</button>
   </div>
 
   <div class="form-container" id="watch">
@@ -28,7 +28,7 @@
       @csrf
       <button class="show" type="submit">パンフレット一覧</button>
     </form>
-    <button class="swich_show" id="login_button">ログインの方はこちら</button>
+    <button class="swich_show" id="login_button">開発者の方はこちら</button>
   </div>
 
   <script>

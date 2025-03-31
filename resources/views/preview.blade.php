@@ -175,11 +175,19 @@
         mode: "css",
         lineNumbers: true,
         theme: "monokai",
-        extraKeys: {"Ctrl-Space": "autocomplete"} // Ctrl+Space で補完
+        extraKeys: { "Ctrl-Space": "autocomplete" } // Ctrl+Space で補完
       });
-  
+
+      // CodeMirrorのヒント機能を有効にする
+      CodeMirror.registerHelper("hint", "css", CodeMirror.hint.css);
+      window.cssEditor.on("inputRead", function (editor, event) {
+        if (!editor.state.completionActive && event.text[0].match(/[a-zA-Z]/)) {
+          CodeMirror.commands.autocomplete(editor);
+        }
+      });
+        
       window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
-        mode: "javascript",
+        mode: "javascript",  
         lineNumbers: true,
         theme: "monokai"
       });
