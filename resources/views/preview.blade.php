@@ -84,7 +84,6 @@
         <textarea id="cssEditor" style="display: none;"></textarea>
         <textarea id="jsEditor" style="display: none;"></textarea>
       </div>
-
       <div class="editor-bottom-wrapper">
         <div class="editor-bottom-box" id="imageDisplayBox">
           @if($uploadedImages->count())

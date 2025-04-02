@@ -2,24 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
-    use HasFactory;
+    protected $fillable = ['class_name', 'description', 'authority_id'];
 
-    protected $table = 'classes';
+    public function uploadedImages()
+    {
+        return $this->hasMany(UploadedImage::class, 'class_id'); // 1つのクラスに複数の画像
+    }
 
-    protected $fillable = [
-        'class_name',
-        'password',
-        'shop_name',
-        'class_room',
-        'comment',
-        'image_path',
-        'html_code',
-        'css_code',
-        'js_code',
-    ];
+    public function authority()
+    {
+        return $this->belongsTo(Authority::class, 'authority_id'); // Authority とのリレーション
+    }
+
+    public function codeSaves()
+    {
+        return $this->hasMany(CodeSave::class, 'class_id'); // 1つのクラスに複数のコード保存
+    }
 }
