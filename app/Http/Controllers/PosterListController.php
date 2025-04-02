@@ -10,8 +10,8 @@ class PosterListController extends Controller
 {
     public function index()
     {
-        // 全てのクラスを取得
-        $allClasses = Classes::all();
+        // authority_id が 1（管理者）以外のクラスを取得
+        $allClasses = Classes::where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
 
         // 各クラスに関連する最新の CodeSave を取得
         foreach ($allClasses as $class) {
@@ -25,9 +25,9 @@ class PosterListController extends Controller
         }
 
         // クラス名のパターンに基づいて分類
-        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
-        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
-        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
+        $rClasses = Classes::where('class_name', 'like', 'R%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
+        $sClasses = Classes::where('class_name', 'like', 'S%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
+        $jClasses = Classes::where('class_name', 'like', 'J%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
 
         // ビューにデータを渡す
         return view('poster_list', [

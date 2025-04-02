@@ -12,22 +12,8 @@
     <div class="app">
     <div class="main">
     <div class="sidebar">
-        <div class="sidebar-icon">
-        <div class="icon">
-            <div class="icon_circle"></div>
-            <p>{{ session('class_name') }}</p>
-        </div>
-        </div>
         <div class="sidebar-scrollable">
         <div class="list">
-            <ul>作業リスト</ul>
-            <button onclick="location.href='{{ route('poster.page') }}'" class="home">
-            <img src="image/home.svg" alt="画像の説明">
-            <span class="home-text">HOME</span>
-            </button>
-            <button onclick="location.href='{{ route('preview.page') }}'" class="work">
-            <img src="image/icon.svg" alt="画像の説明">パンフレットを作成
-            </button>
             <ul>閲覧リスト</ul>
             <details class="dropdown">
             <summary>R メニュー<span>▼</span></summary>
@@ -123,4 +109,3 @@ document.querySelectorAll('.class-selector').forEach(el => {
 renderCode(currentIndex); // 初期表示
 </script>
 </body>
-</html>
