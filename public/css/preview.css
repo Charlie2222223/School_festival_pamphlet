@@ -452,9 +452,10 @@ iframe {
     background-color: #009999;
 }
 
-.dropdown {
-    width: 77%;
-    margin: 1rem auto;
+.menu-button {
+    display: block; /* ブロック要素にすることで中央揃えが適用されやすくなる */
+    width: 50%; /* ボタンの幅を調整 */
+    margin: 15% auto; /* 上下に1remの余白を設定し、左右を自動で中央揃え */
     padding: 0.4rem 1rem;
     font-size: 18px;
     font-weight: bold;
@@ -462,48 +463,15 @@ iframe {
     background-color: #ffffff;
     border: 1px solid #00fe19;
     border-radius: 6px;
-}
-
-.dropdown summary {
+    text-align: center;
     cursor: pointer;
-    list-style: none;
-    user-select: none;
-}
-
-.dropdown[open] summary {
-    border-bottom: 1px solid #00fe19;
-}
-
-
-.dropdown summary:hover {
-    background-color: #f0fdf6;
-    color: #00cc66;
     transition: all 0.2s ease;
 }
 
-.dropdown span {
-    margin-left: 58%;
-}
-
-.dropdown-content {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.dropdown-text {
-    padding: 0.5rem;
-    font-size: 16px;
-    color: #00fe19;
-    cursor: pointer;
-    text-align: right;
-    transition: background-color 0.2s;
-}
-
-.dropdown-text:hover {
-    background-color: #e0f8f8;
-    text-decoration: underline;
+.menu-button:hover {
+    background-color: #f0fdf6;
+    color: #00cc66;
+    border-color: #00cc66;
 }
 
 .logout {

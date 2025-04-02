@@ -56,44 +56,15 @@
           </button>
 
           <ul>閲覧リスト</ul>
-          <details class="dropdown">
-            <summary>R メニュー<span>▼</span></summary>
-            <div class="dropdown-content">
-              @foreach ($rClasses as $class)
-              <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
-                {{ $class->class_name }}
-              </div>
-              @endforeach
-            </div>
-          </details>
-
-          <details class="dropdown">
-            <summary>S メニュー<span>▼</span></summary>
-            <div class="dropdown-content">
-              @foreach ($sClasses as $class)
-              <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
-                {{ $class->class_name }}
-              </div>
-              @endforeach
-            </div>
-          </details>
-
-          <details class="dropdown">
-            <summary>J メニュー<span>▼</span></summary>
-            <div class="dropdown-content">
-              @foreach ($jClasses as $class)
-              <div class="dropdown-text" onclick="alert('{{ $class->class_name }}')">
-                {{ $class->class_name }}
-              </div>
-              @endforeach
-            </div>
-          </details>
+          <button class="menu-button">セーブデータ１</button>
+          <button class="menu-button">セーブデータ２</button>
+          <button class="menu-button">セーブデータ３</button>
         </div>
       </div>
 
       <button onclick="location.href='{{ route('logout') }}'" class="logout">
         <img src="image/logout.png" alt="logout">ログアウト
-    </button>
+      </button>
     </div>
 
     <!-- エディタとプレビューエリア -->
@@ -128,9 +99,7 @@
                   </li>
                 @endforeach
               </ul>
-                <button type="button" id="deleteSelectedImagesBtn" class="delete-button">
-                  取り消し
-                </button>
+              <button type="button" id="deleteSelectedImagesBtn" class="delete-button">取り消し</button>
             </form>
           @else
             <span id="imageStatusText">画像はありません</span>
@@ -150,7 +119,9 @@
           </div>
         </form>
       </div>
+    </div>
   </div>
+
 
   <script>
     const baseUrl = "{{ asset('storage/uploads/' . session('class_name')) }}/";

@@ -281,7 +281,7 @@ canvas {
     padding: 0.4rem 1rem;
     font-size: 18px;
     font-weight: bold;
-    color: #00fe19;
+    color: black;
     background-color: #ffffff;
     border: 1px solid #00fe19;
     border-radius: 6px;
@@ -318,7 +318,7 @@ canvas {
 .dropdown-text {
     padding: 0.5rem;
     font-size: 16px;
-    color: #00fe19;
+    color: black;
     cursor: pointer;
     text-align: right;
     transition: background-color 0.2s;
@@ -353,4 +353,96 @@ background-color: #cc0000;
 .logout img {
     width: 20px;
     height: 20px;
+}
+
+/* デフォルトのスタイルはそのまま維持 */
+
+/* 画面幅が768px以下の場合のスタイル */
+@media (max-width: 768px) {
+    .menu-button {
+        width: 90%; /* ボタンの幅を広げる */
+        font-size: 16px; /* フォントサイズを小さくする */
+        margin: 1rem auto; /* 上下の余白を調整 */
+    }
+
+    .sidebar {
+        width: 100%; /* サイドバーを全幅にする */
+        height: auto; /* 高さを自動調整 */
+        flex-direction: row; /* 横並びに変更 */
+        overflow-x: auto; /* 横スクロールを許可 */
+    }
+
+    .icon_circle {
+        width: 80px; /* アイコンのサイズを小さくする */
+        height: 80px;
+    }
+
+    .home, .work {
+        width: 90%; /* ボタンの幅を広げる */
+        font-size: 16px; /* フォントサイズを小さくする */
+    }
+
+    .center-box {
+        width: 90%; /* 中央ボックスの幅を広げる */
+        font-size: 20px; /* フォントサイズを小さくする */
+    }
+}
+
+/* 画面幅が480px以下の場合のスタイル */
+@media (max-width: 480px) {
+    .menu-button {
+        width: 100%; /* ボタンを全幅にする */
+        font-size: 14px; /* フォントサイズをさらに小さくする */
+    }
+
+    .sidebar {
+        flex-direction: column; /* 縦並びに変更 */
+        height: auto; /* 高さを自動調整 */
+    }
+
+    .icon_circle {
+        width: 60px; /* アイコンのサイズをさらに小さくする */
+        height: 60px;
+    }
+
+    .home, .work {
+        width: 100%; /* ボタンを全幅にする */
+        font-size: 14px; /* フォントサイズをさらに小さくする */
+    }
+
+    .center-box {
+        width: 95%; /* 中央ボックスの幅をさらに広げる */
+        font-size: 18px; /* フォントサイズをさらに小さくする */
+    }
+}
+/* 画面幅が768px以下の場合のスタイル */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* サイドバーを非表示にする */
+    }
+
+    .main {
+        flex-direction: column; /* レイアウトを縦方向に変更 */
+    }
+
+    .preview-frame-container {
+        width: 100%; /* プレビューエリアを全幅に広げる */
+        height: 100vh; /* 高さを画面全体に設定 */
+    }
+}
+
+/* 画面幅が480px以下の場合のスタイル */
+@media (max-width: 480px) {
+    .sidebar {
+        display: none; /* サイドバーを非表示にする */
+    }
+
+    .main {
+        flex-direction: column; /* レイアウトを縦方向に変更 */
+    }
+
+    .preview-frame-container {
+        width: 100%; /* プレビューエリアを全幅に広げる */
+        height: 100vh; /* 高さを画面全体に設定 */
+    }
 }
