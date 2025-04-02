@@ -10,6 +10,42 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 権限を持ったユーザーを3つ作成
+        $adminUsers = [
+            [
+                'class_name' => '管理者クラス1',
+                'password' => Hash::make('adminpassword1'),
+                'shop_name' => '管理者ショップ1',
+                'class_room' => 'Admin Room 101',
+                'comment' => '管理者クラス1のテストデータです。',
+                'image_path' => 'admin_image1.jpg',
+                'authority_id' => 1, // 権限ID
+            ],
+            [
+                'class_name' => '管理者クラス2',
+                'password' => Hash::make('adminpassword2'),
+                'shop_name' => '管理者ショップ2',
+                'class_room' => 'Admin Room 102',
+                'comment' => '管理者クラス2のテストデータです。',
+                'image_path' => 'admin_image2.jpg',
+                'authority_id' => 1, // 権限ID
+            ],
+            [
+                'class_name' => '管理者クラス3',
+                'password' => Hash::make('adminpassword3'),
+                'shop_name' => '管理者ショップ3',
+                'class_room' => 'Admin Room 103',
+                'comment' => '管理者クラス3のテストデータです。',
+                'image_path' => 'admin_image3.jpg',
+                'authority_id' => 1, // 権限ID
+            ],
+        ];
+
+        foreach ($adminUsers as $adminUser) {
+            Classes::create($adminUser);
+        }
+
+        // 通常のクラスデータを作成
         $types = ['R', 'J', 'S'];
 
         foreach ($types as $type) {
@@ -22,6 +58,7 @@ class DatabaseSeeder extends Seeder
                     'class_room' => "Room " . rand(100, 999),
                     'comment' => "{$type}クラス{$i}のテストデータです。",
                     'image_path' => "{$type}_image{$i}.jpg",
+                    'authority_id' => 2, // 通常ユーザーの権限ID
                 ]);
             }
         }

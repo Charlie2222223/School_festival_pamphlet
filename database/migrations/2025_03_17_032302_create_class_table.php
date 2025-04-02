@@ -18,12 +18,7 @@ return new class extends Migration
             $table->string('shop_name');
             $table->string('class_room');
             $table->text('comment')->nullable();
-            $table->string('image_path')->nullable();
-    
-            $table->longText('html_code')->nullable();
-            $table->longText('css_code')->nullable(); 
-            $table->longText('js_code')->nullable();  
-    
+            $table->foreignId('authority_id')->constrained('authorities')->onDelete('cascade');
             $table->timestamps();
         });
     }
