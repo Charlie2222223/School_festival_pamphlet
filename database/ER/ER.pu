@@ -3,18 +3,23 @@ hide circle
 skinparam linetype ortho
 
 entity "classes (クラス)" as classes {
-    * <<PK>> id                        : bigint unsigned : ユーザーID
+    * <<PK>> id                        : bigint unsigned : クラスID
     --
     * class_name                       : varchar(255)    : クラス名
     * password                         : varchar(255)    : パスワード
-    * shop_name                        : varcher(255)    : 店の名前
+    * shop_name                        : varchar(255)    : 店の名前
     * class_room                       : varchar(255)    : 教室名
     * comment                          : text            : クラスのコメント
-    * image_path                       : varchar(255)    : 自分のアイコンのPath
-    ' * html_code                        : longtext        : htmlのコード
-    ' * css_code                         : longtext        : cssのコード
-    ' * js_code                          : longtext        : jsのコード
-    * authority                        : integer         : 権限     
+    * authority_id                     : bigint unsigned : 権限ID (FK)
+    * created_at                       : timestamp       : 作成日時
+    * updated_at                       : timestamp       : 更新日時
+}
+
+entity "class_images (クラス画像)" as class_images {
+    * <<PK>> id                        : bigint unsigned : 画像ID
+    --
+    * <<FK>> class_id                  : bigint unsigned : クラスID
+    * image_path                       : varchar(255)    : 画像のパス
     * created_at                       : timestamp       : 作成日時
     * updated_at                       : timestamp       : 更新日時
 }
@@ -24,7 +29,7 @@ entity "uploaded_images (画像保存)" as uploaded_images {
     --
     * <<FK>> class_id                  : bigint unsigned : クラスID
     * filename                         : varchar(255)    : 画像の保存ファイル
-    * paht                             : varchar(255)    : 保存先のpath
+    * path                             : varchar(255)    : 保存先のパス
     * created_at                       : timestamp       : 作成日時
     * updated_at                       : timestamp       : 更新日時
 }
@@ -34,13 +39,24 @@ entity "code_save (コードセーブデータ)" as code_save {
     --
     * <<FK>> class_id                  : bigint unsigned : クラスID
     * save_number                      : integer         : セーブデータ番号
-    * html_code                        : longtext        : htmlのコード
-    * css_code                         : longtext        : cssのコード
-    * js_code                          : longtext        : jsのコード
-    * main_save_date                   : boolean         : mainのコードかの判定
+    * html_code                        : longtext        : HTMLのコード
+    * css_code                         : longtext        : CSSのコード
+    * js_code                          : longtext        : JSのコード
+    * main_save_date                   : boolean         : メインのコードかの判定
     * created_at                       : timestamp       : 作成日時
     * updated_at                       : timestamp       : 更新日時
 }
 
+entity "authorities (権限)" as authorities {
+    * <<PK>> id                        : bigint unsigned : 権限ID
+    --
+    * authority_name                   : varchar(255)    : 権限名
+    * created_at                       : timestamp       : 作成日時
+    * updated_at                       : timestamp       : 更新日時
+}
+
+classes ||--o{ class_images : "1対多"
 classes ||--o{ uploaded_images : "1対多"
 classes ||--o{ code_save : "1対多"
+classes ||--o{ authorities : "多対1"
+@enduml
