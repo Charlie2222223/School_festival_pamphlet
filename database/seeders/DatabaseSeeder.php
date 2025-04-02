@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
+    
     public function run(): void
     {
+
+        $this->call(AuthoritiesTableSeeder::class);
+
         // 権限を持ったユーザーを3つ作成
         $adminUsers = [
             [
@@ -18,7 +22,6 @@ class DatabaseSeeder extends Seeder
                 'shop_name' => '管理者ショップ1',
                 'class_room' => 'Admin Room 101',
                 'comment' => '管理者クラス1のテストデータです。',
-                'image_path' => 'admin_image1.jpg',
                 'authority_id' => 1, // 権限ID
             ],
             [
@@ -27,7 +30,6 @@ class DatabaseSeeder extends Seeder
                 'shop_name' => '管理者ショップ2',
                 'class_room' => 'Admin Room 102',
                 'comment' => '管理者クラス2のテストデータです。',
-                'image_path' => 'admin_image2.jpg',
                 'authority_id' => 1, // 権限ID
             ],
             [
@@ -36,7 +38,6 @@ class DatabaseSeeder extends Seeder
                 'shop_name' => '管理者ショップ3',
                 'class_room' => 'Admin Room 103',
                 'comment' => '管理者クラス3のテストデータです。',
-                'image_path' => 'admin_image3.jpg',
                 'authority_id' => 1, // 権限ID
             ],
         ];
@@ -57,7 +58,6 @@ class DatabaseSeeder extends Seeder
                     'shop_name' => "{$type}ショップ{$i}",
                     'class_room' => "Room " . rand(100, 999),
                     'comment' => "{$type}クラス{$i}のテストデータです。",
-                    'image_path' => "{$type}_image{$i}.jpg",
                     'authority_id' => 2, // 通常ユーザーの権限ID
                 ]);
             }
