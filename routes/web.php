@@ -7,6 +7,7 @@ use App\Http\Controllers\PosterListController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\AdminController;
 
 Route::post('/image-upload', [ImageUploadController::class, 'upload'])->name('image.upload');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
@@ -24,5 +25,6 @@ Route::get('/preview', [PreViewController::class, 'index'])->name('preview.page'
 Route::get('/preview', [PreviewController::class, 'previewPage'])->name('preview.page');
 Route::post('/image/delete', [ImageUploadController::class, 'delete'])->name('image.delete');
 Route::post('/code/save', [CodeController::class, 'save'])->name('code.save');
+Route::get('/poster_admin', [AdminController::class, 'index'])->name('poster_admin');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
