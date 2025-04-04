@@ -76,7 +76,13 @@
               }
             } else {
               // エラーメッセージを表示
-              errorMessage.textContent = data.message || "ログインに失敗しました。";
+              if (data.error_type === "class_name") {
+                errorMessage.textContent = "クラス名が間違っています。";
+              } else if (data.error_type === "password") {
+                errorMessage.textContent = "パスワードが間違っています。";
+              } else {
+                errorMessage.textContent = data.message || "ログインに失敗しました。";
+              }
               errorMessage.style.display = "block";
             }
           } catch (error) {
@@ -85,28 +91,6 @@
             errorMessage.style.display = "block";
           }
         });
-      
-        const button = document.querySelector("#login_button");
-        const development_button = document.querySelector("#development_button");
-      
-        if (button && development_button) {
-          button.addEventListener("click", toggleDisplay);
-          development_button.addEventListener("click", toggleDisplay);
-        } else {
-          console.error("必要なボタン要素が見つかりません: #login_button または #development_button");
-        }
-      
-        function toggleDisplay() {
-          const watch = document.querySelector("#watch");
-          const login = document.querySelector("#login");
-      
-          if (watch && login) {
-            watch.classList.toggle("hidden");
-            login.classList.toggle("hidden");
-          } else {
-            console.error("要素が見つかりません: #watch または #login");
-          }
-        }
       });
   </script>
 </body>

@@ -26,10 +26,19 @@ class AuthController extends Controller
         // クラス名でクラスを取得
         $class = Classes::where('class_name', $request->class_name)->first();
 
-        // クラスが存在しない、またはパスワードが一致しない場合
-        if (!$class || !Hash::check($request->password, $class->password)) {
+        // クラス名が存在しない場合
+        if (!$class) {
             return response()->json([
-                'message' => 'クラス名またはパスワードが間違っています。',
+                'message' => 'クラス名が間違っています。',
+                'error_type' => 'class_name',
+            ], 401);
+        }
+
+        // パスワードが一致しない場合
+        if (!Hash::check($request->password, $class->password)) {
+            return response()->json([
+                'message' => 'パスワードが間違っています。',
+                'error_type' => 'password',
             ], 401);
         }
 
