@@ -21,7 +21,7 @@
         <div class="sidebar-scrollable">
         <div class="list">
             <ul>作業リスト</ul>
-            <button onclick="location.href='{{ route('poster.page') }}'" class="home">
+            <button onclick="location.href='{{ route('admin_show') }}'" class="home">
             <img src="image/home.svg" alt="画像の説明">
             <span class="home-text">HOME</span>
             </button>

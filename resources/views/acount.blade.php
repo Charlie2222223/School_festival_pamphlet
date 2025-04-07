@@ -47,7 +47,7 @@ const csrfToken = "{{ csrf_token() }}";
     <div class="sidebar-scrollable">
     <div class="list">
         <ul>作業リスト</ul>
-        <button onclick="location.href='{{ route('poster.page') }}'" class="home">
+        <button onclick="location.href='{{ route('admin_show') }}'" class="home">
         <img src="image/home.svg" alt="画像の説明">
         <span class="home-text">HOME</span>
         </button>
@@ -56,9 +56,29 @@ const csrfToken = "{{ csrf_token() }}";
         </button>
 
         <ul>閲覧リスト</ul>
-        <button class="menu-button">セーブデータ１</button>
-        <button class="menu-button">セーブデータ２</button>
-        <button class="menu-button">セーブデータ３</button>
+            <details class="dropdown">
+            <summary>R メニュー<span>▼</span></summary>
+            <div class="dropdown-content">
+                @foreach ($rClasses as $class)
+                <div class="dropdown-text class-selector" data-class-id="{{ $class->id }}">{{ $class->class_name }}</div>
+                @endforeach
+            </div>
+            </details>
+            <details class="dropdown">
+            <summary>S メニュー<span>▼</span></summary>
+            <div class="dropdown-content">
+                @foreach ($sClasses as $class)
+                <div class="dropdown-text class-selector" data-class-id="{{ $class->id }}">{{ $class->class_name }}</div>
+                @endforeach
+            </div>
+            </details>
+            <details class="dropdown">
+            <summary>J メニュー<span>▼</span></summary>
+            <div class="dropdown-content">
+                @foreach ($jClasses as $class)
+                <div class="dropdown-text class-selector" data-class-id="{{ $class->id }}">{{ $class->class_name }}</div>
+                @endforeach
+            </div>
     </div>
     </div>
 
@@ -124,6 +144,7 @@ const csrfToken = "{{ csrf_token() }}";
 
 <script>
 const baseUrl = "{{ asset('storage/uploads/' . session('class_name')) }}/";
+const initialClassId = "{{ $rClasses->first()->id ?? '' }}"; // 初期表示用のRクラス1のID
 
 document.addEventListener("DOMContentLoaded", function () {
 // CodeMirror 初期化
@@ -170,6 +191,10 @@ jsEditor.on('change', updatePreview);
 const htmlCode = `{!! addslashes($html_code ?? '') !!}`;
 const cssCode  = `{!! addslashes($css_code ?? '') !!}`;
 const jsCode   = `{!! addslashes($js_code ?? '') !!}`;
+
+if (initialClassId) {
+    loadClassCode(initialClassId);
+}
 
 htmlEditor.setValue(htmlCode.trim() !== '' ? htmlCode : `<!DOCTYPE html>
 <html>
@@ -350,6 +375,50 @@ console.log("ページが読み込まれました");
         cm.setCursor(cursor);
     }
     }
+});
+
+function loadClassCode(classId) {
+    fetch(`/get-class-code/${classId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // エディタにコードをセット
+                htmlEditor.setValue(data.html_code || "HTMLコードがありません");
+                cssEditor.setValue(data.css_code || "CSSコードがありません");
+                jsEditor.setValue(data.js_code || "JavaScriptコードがありません");
+
+                // HTMLタブをデフォルトで表示
+                switchEditor('html');
+
+                // 画像名を表示
+                const imageBox = document.getElementById('imageDisplayBox');
+                imageBox.innerHTML = ''; // 既存の内容をクリア
+                if (data.images.length > 0) {
+                    const imageList = document.createElement('ul');
+                    data.images.forEach(image => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = image.filename; // 画像名を表示
+                        imageList.appendChild(listItem);
+                    });
+                    imageBox.appendChild(imageList);
+                } else {
+                    imageBox.innerHTML = '<span id="imageStatusText">画像はありません</span>';
+                }
+            } else {
+                alert("コードを取得できませんでした");
+            }
+        })
+        .catch(error => {
+            console.error("エラー:", error);
+            alert("コード取得中にエラーが発生しました");
+        });
+}
+
+document.querySelectorAll(".class-selector").forEach(element => {
+    element.addEventListener("click", function () {
+        const classId = this.dataset.classId;
+        loadClassCode(classId);
+    });
 });
 </script>
 

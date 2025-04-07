@@ -26,7 +26,10 @@ Route::get('/preview', [PreviewController::class, 'previewPage'])->name('preview
 Route::post('/image/delete', [ImageUploadController::class, 'delete'])->name('image.delete');
 Route::post('/code/save', [CodeController::class, 'save'])->name('code.save');
 Route::get('/poster_admin', [AdminController::class, 'index'])->name('poster_admin');
+Route::get('/admin_show', [AdminController::class, 'admin_show'])->name('admin_show');
 Route::get('/admin_edit', [AdminController::class, 'admin_edit'])->name('admin_edit');
+
+Route::get('/get-class-code/{id}', [AdminController::class, 'getClassCode']);
 
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
