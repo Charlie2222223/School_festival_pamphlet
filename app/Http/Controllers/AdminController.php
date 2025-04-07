@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Classes;
 use App\Models\CodeSave;
+use Illuminate\Support\Facades\DB;
 use App\Models\UploadedImage;
+use Carbon\Carbon;
+
 
 class AdminController extends Controller
 {
@@ -53,6 +56,14 @@ public function admin_edit()
     $sClasses = Classes::where('class_name', 'like', 'S%')->get();
     $jClasses = Classes::where('class_name', 'like', 'J%')->get();
 
+    $latestUpdate = DB::table('code_save')
+    ->where('class_id', session('class_id'))
+    ->orderBy('updated_at', 'desc')
+    ->value('updated_at');
+
+    // Carbon インスタンスに変換
+    $latestUpdate = $latestUpdate ? Carbon::parse($latestUpdate) : null;
+
     // 各クラスに関連する最新のコードを取得
     $allClasses = Classes::all();
     foreach ($allClasses as $class) {
@@ -63,11 +74,11 @@ public function admin_edit()
         $class->html_code = $latestCode->html_code ?? null;
         $class->css_code = $latestCode->css_code ?? null;
         $class->js_code = $latestCode->js_code ?? null;
+
     }
 
     // ビューにデータを渡す
-    return view('acount', compact('uploadedImages', 'rClasses', 'sClasses', 'jClasses', 'allClasses'));
-}
+    return view('acount', compact('uploadedImages', 'rClasses', 'sClasses', 'jClasses', 'allClasses', 'latestUpdate'));}
 
     public function admin_show()
 {

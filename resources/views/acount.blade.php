@@ -93,6 +93,9 @@ const csrfToken = "{{ csrf_token() }}";
 </div>
 
 <div class="editor">
+    <div class="editor-update-info">
+        <p>最新更新日: {{ $latestUpdate ? $latestUpdate->format('Y-m-d H:i:s') : '更新履歴がありません' }}</p>
+    </div>
     <div class="editor-tab-buttons">
     <button onclick="switchEditor('html')" style="margin-left: 3%;">HTML</button>
     <button onclick="switchEditor('css')">CSS</button>
@@ -153,6 +156,7 @@ mode: "htmlmixed",
 lineNumbers: true,
 autoCloseTags: false,
 theme: "monokai",
+readOnly: true,
 extraKeys: {
     "'>'": function (cm) {
     cm.replaceSelection('>');
@@ -166,6 +170,7 @@ window.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"),
 mode: "css",
 lineNumbers: true,
 theme: "monokai",
+readOnly: true,
 extraKeys: { "Ctrl-Space": "autocomplete" } // Ctrl+Space で補完
 });
 
@@ -180,6 +185,7 @@ if (!editor.state.completionActive && event.text[0].match(/[a-zA-Z]/)) {
 window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
 mode: "javascript",  
 lineNumbers: true,
+readOnly: true,
 theme: "monokai"
 });
 

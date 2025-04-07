@@ -576,3 +576,10 @@ canvas {
     background-color: #e0f8f8;
     text-decoration: underline;
 }
+
+.editor-update-info {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: right;
+}

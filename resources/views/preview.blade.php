@@ -131,6 +131,7 @@
         mode: "htmlmixed",
         lineNumbers: true,
         autoCloseTags: false,
+        sourcemap: true,
         theme: "monokai",
         extraKeys: {
           "'>'": function (cm) {
@@ -144,6 +145,7 @@
       window.cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
         mode: "css",
         lineNumbers: true,
+        sourcemap: true,
         theme: "monokai",
         extraKeys: { "Ctrl-Space": "autocomplete" } // Ctrl+Space で補完
       });
@@ -159,6 +161,7 @@
       window.jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
         mode: "javascript",  
         lineNumbers: true,
+        sourcemap: true,
         theme: "monokai"
       });
   
