@@ -160,3 +160,27 @@ h1 {
 .hidden {
     display: none;
 }
+
+.user-error-message {
+    position: absolute; /* 絶対位置で配置 */
+    color: red;
+    font-size: 14px;
+    margin-top: -22px; /* フォームとの間隔を調整（上に移動） */
+    display: none; /* 初期状態では非表示 */
+    left: 0; /* 親要素の左端に揃える */
+    width: 100%; /* 親要素の幅に合わせる */
+    text-align: center; /* テキストを中央揃え */
+    z-index: 10; /* 他の要素より前面に表示 */
+}
+
+.password-error-message {
+    position: absolute;
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    display: none;
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    z-index: 10; 
+}
