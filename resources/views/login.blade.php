@@ -31,7 +31,7 @@
   
     <button class="swich_development" id="development_button">パンフレット一覧</button>
   </div>
-
+  
   <div class="form-container hidden" id="watch">
     <h1>JOHO祭</h1>
     <form method="GET" action="{{ route('poster') }}" id="posterForm">
@@ -108,6 +108,25 @@
       }
     });
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+  const loginModal = document.getElementById("login");
+  const watchModal = document.getElementById("watch");
+  const developmentButton = document.getElementById("development_button");
+  const loginButton = document.getElementById("login_button");
+
+  // パンフレット一覧ボタンをクリックしたとき
+  developmentButton.addEventListener("click", function () {
+    loginModal.classList.add("hidden");
+    watchModal.classList.remove("hidden");
+  });
+
+  // 開発者の方はこちらボタンをクリックしたとき
+  loginButton.addEventListener("click", function () {
+    watchModal.classList.add("hidden");
+    loginModal.classList.remove("hidden");
+  });
+});
   </script>
 </body>
 </html>
