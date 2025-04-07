@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>リアルタイムプレビュー（HTML / CSS / JS 切り替え）</title>
-<link rel="stylesheet" href="{{ asset('css/preview.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin_edit.css') }}">
 @vite('resources/js/three-app.ts')
 
 <!-- CodeMirror CSS -->
