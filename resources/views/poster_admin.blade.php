@@ -25,8 +25,8 @@
             <img src="image/home.svg" alt="画像の説明">
             <span class="home-text">HOME</span>
             </button>
-            <button onclick="location.href='{{ route('preview.page') }}'" class="work">
-            <img src="image/icon.svg" alt="画像の説明">パンフレットを作成
+            <button onclick="location.href='{{ route('admin_edit') }}'" class="work">
+            <img src="image/icon.svg" alt="画像の説明">アカウント管理
             </button>
             <ul>閲覧リスト</ul>
             <details class="dropdown">

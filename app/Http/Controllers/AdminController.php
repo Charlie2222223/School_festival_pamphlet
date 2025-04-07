@@ -38,4 +38,22 @@ class AdminController extends Controller
             'jClasses' => $jClasses,
         ]);
     }
+    public function admin_edit()
+    {
+        // セッションにクラスIDがない場合はログイン画面にリダイレクト
+        if (!session()->has('class_id')) {
+            return redirect('/login');
+        }
+    
+        // アップロードされた画像を取得
+        $uploadedImages = UploadedImage::where('class_id', session('class_id'))->get();
+            
+        // クラス名のパターンに基づいて分類
+        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
+        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
+        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
+    
+        // ビューにデータを渡す
+        return view('acount', compact('uploadedImages', 'rClasses', 'sClasses', 'jClasses'));
+    }
 }
