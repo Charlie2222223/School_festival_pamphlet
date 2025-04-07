@@ -30,6 +30,7 @@ Route::get('/admin_show', [AdminController::class, 'admin_show'])->name('admin_s
 Route::get('/admin_edit', [AdminController::class, 'admin_edit'])->name('admin_edit');
 
 Route::get('/get-class-code/{id}', [AdminController::class, 'getClassCode']);
+Route::get('/code-history/{classId}', [CodeController::class, 'getHistory']);
 
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

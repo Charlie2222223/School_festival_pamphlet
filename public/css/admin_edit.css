@@ -211,6 +211,38 @@ iframe {
     background-color: #cc0000;
 }
 
+.history-button-wrapper {
+    z-index: 3;
+    /* margin-top: 2.3rem; */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.history-button {
+    width: 23vw;
+    height: 7vh;
+    background-color: #E8822A;
+    color: white;
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 204, 153, 0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.history-button:hover {
+    background-color: #d2691e; /* 少し明るい色 */
+    transform: scale(1.05); /* ホバー時に拡大 */
+}
+
+.history-button:active {
+    background-color: #a0522d; /* アクティブ時に暗い色 */
+    transform: scale(0.95); /* アクティブ時に縮小 */
+}
+
 .save-button-wrapper {
     z-index: 3;
     margin-top: 2.3rem;
@@ -235,11 +267,12 @@ iframe {
 
 .save-button:hover {
     background-color: #009977;
+    transform: scale(1.05); /* ホバー時に拡大 */
 }
 
 .save-button:active {
     background-color: #007766;
-    transform: scale(0.98);
+    transform: scale(0.95); /* アクティブ時に縮小 */
 }
 
 .sidebar {
@@ -582,4 +615,39 @@ canvas {
     overflow: hidden; /* 内容が溢れた場合に隠す */
     white-space: nowrap; /* テキストを1行にする */
     text-overflow: ellipsis; /* テキストが長い場合に省略記号を表示 */
+}
+
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

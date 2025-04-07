@@ -129,18 +129,25 @@ const csrfToken = "{{ csrf_token() }}";
     </div>
     
     <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
-        <label class="upload-btn">
-        <span class="upload-text">アップロードフォーム</span>
-        <input type="file" accept="image/*" name="image" id="imageInput">
-        <div class="upload-progress-container inside-btn">
-            <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        <div class="history-button-wrapper">
+        <button class="history-button">履歴</button>
         </div>
-        </label>
         <div class="save-button-wrapper">
         <button id="saveCodeButton" class="save-button">コードを保存</button>
         </div>
     </form>
     </div>
+
+    <div id="historyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>コード履歴</h2>
+            <div id="historyList">
+                <!-- 履歴がここに表示されます -->
+            </div>
+        </div>
+    </div>
+
 </div>
 </div>
 
@@ -424,6 +431,76 @@ document.querySelectorAll(".class-selector").forEach(element => {
     element.addEventListener("click", function () {
         const classId = this.dataset.classId;
         loadClassCode(classId);
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const historyModal = document.getElementById("historyModal");
+    const closeModal = document.getElementById("closeModal");
+    const historyList = document.getElementById("historyList");
+
+    // 履歴をクリックしたときの処理
+    document.querySelectorAll(".class-selector").forEach(element => {
+        element.addEventListener("click", function () {
+            const classId = this.dataset.classId;
+
+            // モーダルを表示
+            historyModal.style.display = "block";
+
+            // 履歴データを取得
+            fetch(`/code-history/${classId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        historyList.innerHTML = ""; // 既存の履歴をクリア
+
+                        data.history.forEach(item => {
+                            const historyItem = document.createElement("div");
+                            historyItem.classList.add("history-item");
+                            historyItem.innerHTML = `
+                                <p><strong>保存日時:</strong> ${item.created_at}</p>
+                                <button class="view-code-btn" data-html="${item.html_code}" data-css="${item.css_code}" data-js="${item.js_code}">コードを見る</button>
+                            `;
+                            historyList.appendChild(historyItem);
+                        });
+
+                        // コードを見るボタンのイベントリスナーを追加
+                        document.querySelectorAll(".view-code-btn").forEach(button => {
+                            button.addEventListener("click", function () {
+                                const html = this.dataset.html;
+                                const css = this.dataset.css;
+                                const js = this.dataset.js;
+
+                                // エディタにコードをセット
+                                htmlEditor.setValue(html || "HTMLコードがありません");
+                                cssEditor.setValue(css || "CSSコードがありません");
+                                jsEditor.setValue(js || "JavaScriptコードがありません");
+
+                                // モーダルを閉じる
+                                historyModal.style.display = "none";
+                            });
+                        });
+                    } else {
+                        historyList.innerHTML = "<p>履歴がありません。</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error("履歴取得エラー:", error);
+                    historyList.innerHTML = "<p>履歴の取得中にエラーが発生しました。</p>";
+                });
+        });
+    });
+
+    // モーダルを閉じる処理
+    closeModal.addEventListener("click", function () {
+        historyModal.style.display = "none";
+    });
+
+    // モーダル外をクリックしたときに閉じる
+    window.addEventListener("click", function (event) {
+        if (event.target === historyModal) {
+            historyModal.style.display = "none";
+        }
     });
 });
 </script>
