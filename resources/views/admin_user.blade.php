@@ -64,35 +64,34 @@
             <img src="image/logout.png" alt="logout">ログアウト
         </button>
     </div>
-</div>
-
-<div class="class-list">
-    <h2>クラス一覧</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>クラス名</th>
-                <th>権限</th>
-                <th>作成日</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($classes as $class)
-            <tr>
-                <td>{{ $class->id }}</td>
-                <td>{{ $class->class_name }}</td>
-                <td>{{ $class->authority_id ?? 'なし' }}</td>
-                <td>{{ $class->created_at->format('Y-m-d') }}</td>
-                <td>
-                    <button onclick="editClass({{ $class->id }})">編集</button>
-                    <button onclick="deleteClass({{ $class->id }})">削除</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="class-list">
+        <h2>クラス一覧</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>クラス名</th>
+                    <th>権限</th>
+                    <th>作成日</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($classes as $class)
+                <tr>
+                    <td>{{ $class->id }}</td>
+                    <td>{{ $class->class_name }}</td>
+                    <td>{{ $class->authority_id ?? 'なし' }}</td>
+                    <td>{{ $class->created_at->format('Y-m-d') }}</td>
+                    <td>
+                        <button onclick="editClass({{ $class->id }})">編集</button>
+                        <button onclick="deleteClass({{ $class->id }})">削除</button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

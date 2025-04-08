@@ -383,3 +383,92 @@ background-color: #cc0000;
     width: 20px;
     height: 20px;
 }
+
+/* class-list 全体のスタイル */
+.class-list {
+    margin: 0; /* 余白をなくす */
+    padding: 20px;
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 70vw; /* ビューポート全体の幅 */
+    height: 80vh; /* ビューポート全体の高さ */
+    box-sizing: border-box; /* パディングを含めてサイズを計算 */
+    border: 1px solid #ddd; /* 外枠を薄いグレーに */
+    background-color: #ffffff; /* 背景を白に設定 */
+    overflow: auto; /* 内容が多い場合にスクロール可能にする */
+    z-index: 10;
+    border-radius: 8px; /* 角を丸くして柔らかい印象に */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 軽い影を追加 */
+}
+
+/* テーブルのスタイル */
+.class-list table {
+    width: 100%; /* テーブルを親要素に合わせる */
+    border-collapse: collapse;
+    font-size: 16px;
+    background-color: #ffffff; /* テーブル全体の背景を白に設定 */
+}
+
+.class-list table th,
+.class-list table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    background-color: #f9f9f9; /* 各セルの背景を薄いグレーに設定 */
+}
+
+.class-list table th {
+    background-color: #007bff; /* ヘッダー行の背景色を青に設定 */
+    font-weight: bold;
+    color: white; /* ヘッダーの文字色を白に設定 */
+    text-align: center;
+}
+
+.class-list table tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶数行の背景色を薄いグレーに設定 */
+}
+
+.class-list table tr:nth-child(odd) {
+    background-color: #ffffff; /* 奇数行の背景色を白に設定 */
+}
+
+.class-list table tr:hover {
+    background-color: #e6f7ff; /* ホバー時の背景色を薄い青に設定 */
+    transition: background-color 0.3s ease;
+}
+
+/* ボタンのスタイル */
+.class-list button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.class-list button:hover {
+    background-color: #0056b3;
+}
+
+.class-list button:active {
+    background-color: #003f7f;
+    transform: scale(0.98);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .class-list table th,
+    .class-list table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .class-list button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
