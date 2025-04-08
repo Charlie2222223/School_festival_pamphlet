@@ -14,7 +14,7 @@ class AddCommentToCodesaveTable extends Migration
 
     public function down()
     {
-        Schema::table('codesave', function (Blueprint $table) {
+        Schema::table('code_save', function (Blueprint $table) {
             $table->dropColumn('comment'); // カラムを削除
         });
     }

@@ -650,3 +650,25 @@ canvas {
     background-color: #007766;
     transform: scale(0.98);
 }
+
+.history-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.history-item:hover {
+    background-color: #e6f7ff; /* ホバー時の背景色 */
+    transform: scale(1.02); /* ホバー時に少し拡大 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ホバー時の影 */
+}
+
+.history-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}

@@ -351,11 +351,14 @@
         const html = htmlEditor.getValue();
         const css = `<style>${cssEditor.getValue()}</style>`;
         const js = `<script>${jsEditor.getValue()}<\/script>`;
-  
+    
         let finalHtml = html.replace(/<img .*?>/, '');
         const content = `${finalHtml}${css}${js}`;
         document.getElementById('previewFrame').srcdoc = content;
       }
+    
+      // グローバルスコープに関数を登録
+      window.updatePreview = updatePreview;
   
       // タグ自動閉じ補助関数
       function autoCloseTag(cm, ch) {
@@ -422,6 +425,80 @@
       });
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const historyButton = document.getElementById("openHistoryModal");
+        const historyModal = document.getElementById("historyModal");
+        const closeModal = document.getElementById("closeModal");
+        const historyList = document.getElementById("historyList");
+    
+        // 履歴ボタンをクリックしてモーダルを表示
+        historyButton.addEventListener("click", function (e) {
+            e.preventDefault();
+    
+            const classId = document.body.dataset.classId;
+    
+            // モーダルを表示
+            historyModal.style.display = "block";
+    
+            // 履歴データを取得
+            fetch(`/code-history/${classId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        historyList.innerHTML = ""; // 既存の履歴をクリア
+    
+                        data.history.forEach(item => {
+                            const historyItem = document.createElement("div");
+                            historyItem.classList.add("history-item");
+                            historyItem.dataset.html = encodeURIComponent(item.html_code);
+                            historyItem.dataset.css = encodeURIComponent(item.css_code);
+                            historyItem.dataset.js = encodeURIComponent(item.js_code);
+                            historyItem.innerHTML = `
+                                <p><strong>保存日時:</strong> ${item.created_at}</p>
+                                <p><strong>コメント:</strong> ${item.comment || "コメントがありません"}</p>
+                            `;
+                            historyList.appendChild(historyItem);
+    
+                            // 履歴アイテムにクリックイベントを追加
+                            historyItem.addEventListener("click", function () {
+                                const htmlCode = decodeURIComponent(this.dataset.html);
+                                const cssCode = decodeURIComponent(this.dataset.css);
+                                const jsCode = decodeURIComponent(this.dataset.js);
+    
+                                // エディターに反映
+                                htmlEditor.setValue(htmlCode);
+                                cssEditor.setValue(cssCode);
+                                jsEditor.setValue(jsCode);
+    
+                                // プレビューを更新
+                                updatePreview();
+    
+                                // モーダルを閉じる
+                                historyModal.style.display = "none";
+                            });
+                        });
+                    } else {
+                        historyList.innerHTML = "<p>履歴がありません。</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error("履歴取得エラー:", error);
+                    historyList.innerHTML = "<p>履歴の取得中にエラーが発生しました。</p>";
+                });
+        });
+    
+        // モーダルを閉じる
+        closeModal.addEventListener("click", function () {
+            historyModal.style.display = "none";
+        });
+    
+        // モーダル外をクリックした場合に閉じる
+        window.addEventListener("click", function (event) {
+            if (event.target === historyModal) {
+                historyModal.style.display = "none";
+            }
+        });
+    });
     
   </script>
 
