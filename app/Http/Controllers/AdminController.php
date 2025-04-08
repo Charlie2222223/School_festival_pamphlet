@@ -112,13 +112,13 @@ class AdminController extends Controller
     
     public function admin_classes()
     {
-        // 全クラスを取得
-        $classes = Classes::all();
+        // 全クラスを取得（authority_name をリレーションで取得）
+        $classes = Classes::with('authority')->get();
 
         // クラス名のパターンに基づいて分類
-        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
-        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
-        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
+        $rClasses = Classes::with('authority')->where('class_name', 'like', 'R%')->get();
+        $sClasses = Classes::with('authority')->where('class_name', 'like', 'S%')->get();
+        $jClasses = Classes::with('authority')->where('class_name', 'like', 'J%')->get();
 
         // ビューにデータを渡す
         return view('admin_user', compact('classes', 'rClasses', 'sClasses', 'jClasses'));

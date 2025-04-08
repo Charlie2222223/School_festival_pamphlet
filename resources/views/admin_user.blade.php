@@ -81,7 +81,7 @@
                 <tr>
                     <td>{{ $class->id }}</td>
                     <td>{{ $class->class_name }}</td>
-                    <td>{{ $class->authority_id ?? 'なし' }}</td>
+                    <td>{{ $class->authority->authority_name ?? 'なし' }}</td>
                     <td>{{ $class->created_at->format('Y-m-d') }}</td>
                     <td>
                         <button onclick="editClass({{ $class->id }})">編集</button>
