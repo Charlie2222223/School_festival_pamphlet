@@ -14,6 +14,7 @@ class CodeSave extends Model
         'css_code',
         'js_code',
         'main_save_date',
+        'comment',
     ];
 
     /**

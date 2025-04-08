@@ -99,7 +99,7 @@ public function admin_edit()
     // クラス名のパターンに基づいて分類
     $rClasses = Classes::where('class_name', 'like', 'R%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
     $sClasses = Classes::where('class_name', 'like', 'S%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
-    $jClasses = Classes::where('class_name', 'like', 'J%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
+    $jClasses = Classes::where('class_name', 'like', value: 'J%')->where('authority_id', '!=', 1)->orWhereNull('authority_id')->get();
 
     // ビューにデータを渡す
     return view('poster_admin', [
@@ -118,7 +118,10 @@ public function getClassCode($id)
         return response()->json(['success' => false, 'message' => 'クラスが見つかりません']);
     }
 
+    // 最新のコードを取得
     $latestCode = CodeSave::where('class_id', $id)->orderBy('created_at', 'desc')->first();
+
+    // アップロードされた画像を取得
     $images = UploadedImage::where('class_id', $id)->get(['filename', 'path']);
 
     return response()->json([
@@ -127,6 +130,7 @@ public function getClassCode($id)
         'html_code' => $latestCode->html_code ?? null,
         'css_code' => $latestCode->css_code ?? null,
         'js_code' => $latestCode->js_code ?? null,
+        'comment' => $latestCode->comment ?? 'コメントがありません', // コメントを追加
         'images' => $images,
     ]);
 }

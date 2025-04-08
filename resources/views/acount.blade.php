@@ -427,10 +427,12 @@ function loadClassCode(classId) {
         });
 }
 
+let currentClassId = document.body.dataset.classId; // 初期値として現在のクラスIDを設定
+
 document.querySelectorAll(".class-selector").forEach(element => {
     element.addEventListener("click", function () {
-        const classId = this.dataset.classId;
-        loadClassCode(classId);
+        currentClassId = this.dataset.classId; // クリックしたクラスのIDを設定
+        loadClassCode(currentClassId); // クラスのコードを読み込む
     });
 });
 
@@ -438,15 +440,15 @@ const historyButton = document.getElementById("openHistoryModal");
 historyButton.addEventListener("click", function (e) {
     e.preventDefault();
 
-    const classId = document.body.dataset.classId;
-
     // モーダルを表示
+    const historyModal = document.getElementById("historyModal");
     historyModal.style.display = "block";
 
     // 履歴データを取得
-    fetch(`/code-history/${classId}`)
+    fetch(`/code-history/${currentClassId}`)
         .then(response => response.json())
         .then(data => {
+            const historyList = document.getElementById("historyList");
             if (data.success) {
                 historyList.innerHTML = ""; // 既存の履歴をクリア
 
@@ -455,26 +457,9 @@ historyButton.addEventListener("click", function (e) {
                     historyItem.classList.add("history-item");
                     historyItem.innerHTML = `
                         <p><strong>保存日時:</strong> ${item.created_at}</p>
-                        <button class="view-code-btn" data-html="${item.html_code}" data-css="${item.css_code}" data-js="${item.js_code}">コードを見る</button>
+                        <p><strong>コメント:</strong> ${item.comment || "コメントがありません"}</p>
                     `;
                     historyList.appendChild(historyItem);
-                });
-
-                // コードを見るボタンのイベントリスナーを追加
-                document.querySelectorAll(".view-code-btn").forEach(button => {
-                    button.addEventListener("click", function () {
-                        const html = this.dataset.html;
-                        const css = this.dataset.css;
-                        const js = this.dataset.js;
-
-                        // エディタにコードをセット
-                        htmlEditor.setValue(html || "HTMLコードがありません");
-                        cssEditor.setValue(css || "CSSコードがありません");
-                        jsEditor.setValue(js || "JavaScriptコードがありません");
-
-                        // モーダルを閉じる
-                        historyModal.style.display = "none";
-                    });
                 });
             } else {
                 historyList.innerHTML = "<p>履歴がありません。</p>";
@@ -482,6 +467,7 @@ historyButton.addEventListener("click", function (e) {
         })
         .catch(error => {
             console.error("履歴取得エラー:", error);
+            const historyList = document.getElementById("historyList");
             historyList.innerHTML = "<p>履歴の取得中にエラーが発生しました。</p>";
         });
 });

@@ -34,9 +34,9 @@ body {
 
 .editor {    
     width: 48%;
-    height: 75vh;
+    height: 87vh;
     z-index: 2;
-    margin-top: 10%;
+    margin-top: 4%;
     margin-right: 1%;
     overflow: hidden; /* ← 親ははみ出し隠す */
 }
@@ -115,7 +115,7 @@ iframe {
 
 .editor-bottom-box {
     width: 55%;
-    height: 200px;
+    height: 250px;
     background-color: #ffffff; 
     border: 1px solid black;
     padding: 1rem;
@@ -130,7 +130,6 @@ iframe {
     align-items: flex-start;
     padding-bottom: 3rem; /* ← ボタン分のスペース確保 */
 }
-
 .upload-btn {
     height: 10%;
     width:  89%;
@@ -582,4 +581,72 @@ canvas {
     overflow: hidden; /* 内容が溢れた場合に隠す */
     white-space: nowrap; /* テキストを1行にする */
     text-overflow: ellipsis; /* テキストが長い場合に省略記号を表示 */
+}
+
+/* モーダル全体のスタイル */
+.modal {
+    display: none; /* 初期状態で非表示 */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景を半透明にする */
+    overflow: auto; /* モーダル全体をスクロール可能にする */
+}
+
+/* モーダルコンテンツのスタイル */
+.modal-content {
+    background-color: #fff;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 中央に配置 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 8px;
+    max-height: 80vh; /* モーダルの高さを制限 */
+    overflow-y: auto; /* 縦方向にスクロール可能にする */
+}
+
+/* 閉じるボタンのスタイル */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.history-button {
+    background-color: #00cc99;
+    color: white;
+    padding: 0.6rem 1.4rem;
+    margin-bottom: 7%;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 204, 153, 0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.history-button:hover {
+    background-color: #009977;
+}
+
+.history-button:active {
+    background-color: #007766;
+    transform: scale(0.98);
 }

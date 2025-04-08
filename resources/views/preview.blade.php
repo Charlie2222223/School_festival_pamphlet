@@ -106,6 +106,9 @@
         </div>
       
         <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
+          <div class="history-button-wrapper">
+            <button class="history-button" id="openHistoryModal">履歴</button>
+          </div>
           <label class="upload-btn">
             <span class="upload-text">アップロードフォーム</span>
             <input type="file" accept="image/*" name="image" id="imageInput">
@@ -114,9 +117,21 @@
             </div>
           </label>
           <div class="save-button-wrapper">
+            <textarea id="commentInput" name="comment" placeholder="コメントを入力してください" rows="3" style="width: 100%; margin-bottom: 10px;"></textarea>
             <button id="saveCodeButton" class="save-button">コードを保存</button>
-          </div>
+        </div>
         </form>
+      </div>
+
+      <!-- モーダルのHTML構造 -->
+      <div id="historyModal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <h2>コード履歴</h2>
+          <div id="historyList">
+            <!-- 履歴がここに表示されます -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -206,36 +221,38 @@
       // 保存ボタン処理
       const saveButton = document.getElementById("saveCodeButton");
       if (saveButton) {
-        saveButton.addEventListener("click", function (e) {
-          e.preventDefault();
-  
-          const html = htmlEditor.getValue();
-          const css  = cssEditor.getValue();
-          const js   = jsEditor.getValue();
-  
-          const formData = new FormData();
-          formData.append('_token', csrfToken);
-          formData.append('html', html);
-          formData.append('css', css);
-          formData.append('js', js);
-  
-          fetch("{{ route('code.save') }}", {
-            method: 'POST',
-            body: formData
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              alert("コードが保存されました！");
-            } else {
-              alert("保存に失敗しました：" + (data.message || ''));
-            }
-          })
-          .catch(error => {
-            console.error("保存エラー:", error);
-            alert("保存中にエラーが発生しました。");
+          saveButton.addEventListener("click", function (e) {
+              e.preventDefault();
+      
+              const html = htmlEditor.getValue();
+              const css = cssEditor.getValue();
+              const js = jsEditor.getValue();
+              const comment = document.getElementById("commentInput").value; // コメントを取得
+      
+              const formData = new FormData();
+              formData.append('_token', csrfToken);
+              formData.append('html', html);
+              formData.append('css', css);
+              formData.append('js', js);
+              formData.append('comment', comment); // コメントを追加
+      
+              fetch("{{ route('code.save') }}", {
+                  method: 'POST',
+                  body: formData
+              })
+              .then(res => res.json())
+              .then(data => {
+                  if (data.success) {
+                      alert("コードが保存されました！");
+                  } else {
+                      alert("保存に失敗しました：" + (data.message || ''));
+                  }
+              })
+              .catch(error => {
+                  console.error("保存エラー:", error);
+                  alert("保存中にエラーが発生しました。");
+              });
           });
-        });
       }
   
       // 画像アップロード処理
@@ -353,7 +370,59 @@
           cm.setCursor(cursor);
         }
       }
+
+      const historyButton = document.getElementById("openHistoryModal");
+      historyButton.addEventListener("click", function (e) {
+          e.preventDefault();
+      
+          const classId = document.body.dataset.classId;
+      
+          // モーダルを表示
+          historyModal.style.display = "block";
+      
+          // 履歴データを取得
+          fetch(`/code-history/${classId}`)
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      historyList.innerHTML = ""; // 既存の履歴をクリア
+      
+                      data.history.forEach(item => {
+                          const historyItem = document.createElement("div");
+                          historyItem.classList.add("history-item");
+                          historyItem.innerHTML = `
+                              <p><strong>保存日時:</strong> ${item.created_at}</p>
+                              <p><strong>コメント:</strong> ${item.comment || "コメントがありません"}</p>
+                          `;
+                          historyList.appendChild(historyItem);
+                      });
+                  } else {
+                      historyList.innerHTML = "<p>履歴がありません。</p>";
+                  }
+              })
+              .catch(error => {
+                  console.error("履歴取得エラー:", error);
+                  historyList.innerHTML = "<p>履歴の取得中にエラーが発生しました。</p>";
+              });
+      });
+
+      const historyModal = document.getElementById("historyModal");
+      const closeModal = document.getElementById("closeModal");
+
+      // モーダルを閉じる
+      closeModal.addEventListener("click", function () {
+          historyModal.style.display = "none";
+      });
+
+      // モーダル外をクリックした場合に閉じる
+      window.addEventListener("click", function (event) {
+          if (event.target === historyModal) {
+              historyModal.style.display = "none";
+          }
+      });
     });
+
+    
   </script>
 
 </body>
