@@ -118,7 +118,6 @@ canvas {
     gap: 8px; /* 画像とテキストの間隔 */
     width: 77%;
     margin: 1rem auto;
-    margin-bottom: 20%;
     padding: 1rem;
     font-size: 20px;
     font-weight: bold;
@@ -136,6 +135,36 @@ canvas {
 }
 
 .work img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* ← 左寄せ */
+    gap: 8px; /* 画像とテキストの間隔 */
+    width: 77%;
+    margin: 1rem auto;
+    margin-bottom: 20%;
+    padding: 1rem;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffa600;
+    background-color: #ffffff;
+    text-align: left;
+    border: 1px solid #ffa600;
+}
+
+.user:hover {
+    background-color: #ffd058;
+    border-color: #d98d00;
+    color: #d98d00;
+    transition: all 0.2s ease;
+}
+
+.user img {
     width: 24px;
     height: 24px;
     object-fit: contain;

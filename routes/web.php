@@ -32,5 +32,6 @@ Route::get('/admin_edit', [AdminController::class, 'admin_edit'])->name('admin_e
 Route::get('/get-class-code/{id}', [AdminController::class, 'getClassCode']);
 Route::get('/code-history/{classId}', [CodeController::class, 'getHistory']);
 
+Route::get('/admin/classes', [AdminController::class, 'admin_classes'])->name('admin_classes');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

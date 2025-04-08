@@ -64,68 +64,9 @@
             <img src="image/logout.png" alt="logout">ログアウト
         </button>
     </div>
-
-    <div class="content">
-        <div style="font-size: 20px; font-weight: bold; color: black; margin: 10px 0 0 20px;">
-        表示中: <span id="currentClassName">{{ $allClasses[0]->class_name }}</span>
-        </div>
-
-        <div class="center-box">
-            <iframe id="previewFrame" style="width: 100%; height: 100%; border: none; overflow: auto;"></iframe>
-        <div class="button-group">
-            <button id="prevClass">▲</button>
-            <button id="nextClass">▼</button>
-        </div>
-        </div>
-    </div>
-    </div>
 </div>
 
 <script>
-const classes = @json($allClasses, JSON_UNESCAPED_UNICODE);
-let currentIndex = 0;
-
-const previewFrame = document.getElementById('previewFrame');
-const classNameDisplay = document.getElementById('currentClassName');
-
-function renderCode(index) {
-    const cls = classes[index];
-    const html = cls.html_code ?? "<p>HTML未保存</p>";
-    const css = `<style>${cls.css_code ?? ''}</style>`;
-    const js  = `<script>${cls.js_code ?? ''}<\/script>`;
-    const content = `
-    <!DOCTYPE html>
-    <html lang="ja">
-        <head><meta charset="UTF-8">${css}</head>
-        <body>${html}${js}</body>
-    </html>`;
-    previewFrame.srcdoc = content;
-    classNameDisplay.textContent = cls.class_name;
-}
-
-document.getElementById('prevClass').addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + classes.length) % classes.length;
-    renderCode(currentIndex);
-});
-
-document.getElementById('nextClass').addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % classes.length;
-    renderCode(currentIndex);
-});
-
-// ドロップダウンメニュークリックでクラス切替
-document.querySelectorAll('.class-selector').forEach(el => {
-    el.addEventListener('click', () => {
-    const classId = parseInt(el.getAttribute('data-class-id'));
-    const index = classes.findIndex(c => c.id === classId);
-    if (index !== -1) {
-        currentIndex = index;
-        renderCode(currentIndex);
-    }
-    });
-});
-
-renderCode(currentIndex); // 初期表示
 </script>
 </body>
 </html>

@@ -52,7 +52,11 @@ const csrfToken = "{{ csrf_token() }}";
         <span class="home-text">HOME</span>
         </button>
         <button onclick="location.href='{{ route('admin_edit') }}'" class="work">
-        <img src="image/icon.svg" alt="画像の説明">アカウント管理
+        <img src="image/icon.svg" alt="画像の説明">コード管理
+        </button>
+        <button onclick="location.href='{{ route('admin_show') }}'" class="home">
+            <img src="image/user.png" alt="画像の説明">
+            <span class="home-text">クラス管理</span>
         </button>
 
         <ul>閲覧リスト</ul>
