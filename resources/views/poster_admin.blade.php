@@ -29,7 +29,7 @@
             <img src="image/icon.svg" alt="画像の説明">
             <span class="home-text">アカウント管理</span>
             </button>
-            <button onclick="location.href='{{ route('admin_edit') }}'" class="user">
+            <button onclick="location.href='{{ route('admin_user') }}'" class="user">
             <img src="image/user.png" alt="画像の説明">
             <span class="home-text">ユーザー管理</span>
             </button>

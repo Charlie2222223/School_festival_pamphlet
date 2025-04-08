@@ -114,9 +114,14 @@ class AdminController extends Controller
     {
         // 全クラスを取得
         $classes = Classes::all();
-    
+
+        // クラス名のパターンに基づいて分類
+        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
+        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
+        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
+
         // ビューにデータを渡す
-        return view('admin_user', compact('classes'));
+        return view('admin_user', compact('classes', 'rClasses', 'sClasses', 'jClasses'));
     }
 
     public function getClassCode($id)

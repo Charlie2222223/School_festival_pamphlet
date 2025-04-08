@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8" />
-    <title>Three.js背景 × フォーム</title>
+    <meta charset="UTF-8">
+    <title>クラス一覧</title>
     @vite('resources/js/three-app.ts')
-    <link rel="stylesheet" href="{{ asset('css/poster.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin_user.css') }}">
 </head>
 <body>
 <div class="background-pattern"></div>
@@ -29,7 +29,7 @@
             <img src="image/icon.svg" alt="画像の説明">
             <span class="home-text">アカウント管理</span>
             </button>
-            <button onclick="location.href='{{ route('admin_edit') }}'" class="user">
+            <button onclick="location.href='{{ route('admin_user') }}'" class="user">
             <img src="image/user.png" alt="画像の説明">
             <span class="home-text">ユーザー管理</span>
             </button>
@@ -66,7 +66,63 @@
     </div>
 </div>
 
+<div class="class-list">
+    <h2>クラス一覧</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>クラス名</th>
+                <th>権限</th>
+                <th>作成日</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($classes as $class)
+            <tr>
+                <td>{{ $class->id }}</td>
+                <td>{{ $class->class_name }}</td>
+                <td>{{ $class->authority_id ?? 'なし' }}</td>
+                <td>{{ $class->created_at->format('Y-m-d') }}</td>
+                <td>
+                    <button onclick="editClass({{ $class->id }})">編集</button>
+                    <button onclick="deleteClass({{ $class->id }})">削除</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 <script>
+function editClass(classId) {
+    alert(`クラスID ${classId} を編集します（実装は別途追加してください）`);
+}
+
+function deleteClass(classId) {
+    if (confirm(`クラスID ${classId} を削除しますか？`)) {
+        fetch(`/admin/classes/delete/${classId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('クラスを削除しました');
+                location.reload();
+            } else {
+                alert('削除に失敗しました');
+            }
+        })
+        .catch(error => {
+            console.error('エラー:', error);
+            alert('削除中にエラーが発生しました');
+        });
+    }
+}
 </script>
 </body>
 </html>
