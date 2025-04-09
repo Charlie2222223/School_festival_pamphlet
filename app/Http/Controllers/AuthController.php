@@ -20,6 +20,7 @@ class AuthController extends Controller
         $request->validate([
             'class_name' => 'required|string',
             'password' => 'required|string',
+            'email' => 'nullable|email', // メールアドレスは初回ログイン時のみ必須
         ]);
 
         $class = Classes::where('class_name', $request->class_name)->first();
@@ -34,9 +35,30 @@ class AuthController extends Controller
 
         // 初回ログインの場合
         if ($class->is_first_login) {
+            // メールアドレスが送信されていない場合
+            if (!$request->email) {
+                return response()->json([
+                    'is_first_login' => true,
+                    'message' => '初回ログインです。メールアドレスを入力してください。',
+                ]);
+            }
+
+            // メールアドレスのドメインをチェック
+            $emailDomain = substr(strrchr($request->email, "@"), 1); // "@"以降を取得
+            if ($emailDomain !== 'ocsjoho.onmicrosoft.com') {
+                return response()->json([
+                    'error_type' => 'email',
+                    'message' => 'ocsjoho.onmicrosoft.comのメールアドレスを使用してください。',
+                ], 422);
+            }
+
+            // メールアドレスを保存し、初回ログインフラグを解除
+            $class->mail = $request->email;
+            $class->is_first_login = false;
+            $class->save();
+
             return response()->json([
-                'is_first_login' => true,
-                'message' => '初回ログインです。メールアドレスを入力してください。',
+                'redirect_url' => route('poster.page'),
             ]);
         }
 
