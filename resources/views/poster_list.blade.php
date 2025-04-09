@@ -15,7 +15,7 @@
         <div class="sidebar-icon">
         <div class="icon">
             <div class="icon_circle"></div>
-            <p>{{ session('class_name') }}</p>
+            <p>{{ $allClasses[0]->class_name }}</p>
         </div>
         </div>
         <div class="sidebar-scrollable">
