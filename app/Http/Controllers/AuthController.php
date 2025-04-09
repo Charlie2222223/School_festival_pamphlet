@@ -17,45 +17,32 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // 入力値のバリデーション
         $request->validate([
             'class_name' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        // クラス名でクラスを取得
         $class = Classes::where('class_name', $request->class_name)->first();
 
-        // クラス名が存在しない場合
         if (!$class) {
-            return response()->json([
-                'message' => 'クラス名が間違っています。',
-                'error_type' => 'class_name',
-            ], 401);
+            return response()->json(['error_type' => 'class_name'], 422);
         }
 
-        // パスワードが一致しない場合
         if (!Hash::check($request->password, $class->password)) {
-            return response()->json([
-                'message' => 'パスワードが間違っています。',
-                'error_type' => 'password',
-            ], 401);
+            return response()->json(['error_type' => 'password'], 422);
         }
 
-        // セッションに保存
-        Session::put('class_id', $class->id);
-        Session::put('class_name', $class->class_name);
-
-        // 管理者の場合
-        if ($class->authority_id == 1) {
+        // 初回ログインの場合
+        if ($class->is_first_login) {
             return response()->json([
-                'redirect_url' => url('/poster_admin'),
+                'is_first_login' => true,
+                'message' => '初回ログインです。メールアドレスを入力してください。',
             ]);
         }
 
-        // 一般ユーザーの場合
+        // 通常ログイン成功
         return response()->json([
-            'redirect_url' => url('/poster_list'),
+            'redirect_url' => route('poster.page'),
         ]);
     }
 

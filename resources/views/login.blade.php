@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Three.js背景 × フォーム</title>
+  <title>学園祭パンフレット作成システム・ログイン</title>
 
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
   @vite('resources/js/three-app.ts')
@@ -25,6 +25,11 @@
         <input type="password" name="password" id="password" placeholder="password" required />
         <div id="password_error" class="password-error-message"></div>
       </div>
+
+      <div style="position: relative; display: none;" id="email_container">
+        <input type="email" name="email" id="email" placeholder="メールアドレス" />
+        <div id="email_error" class="email-error-message"></div>
+      </div>
   
       <button class="login" type="submit">login</button>
     </form>
@@ -43,90 +48,84 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById("loginForm");
-    const classNameError = document.getElementById("class_name_error");
-    const passwordError = document.getElementById("password_error");
+      const loginForm = document.getElementById("loginForm");
+      const classNameError = document.getElementById("class_name_error");
+      const passwordError = document.getElementById("password_error");
+      const emailContainer = document.getElementById("email_container");
+      const emailError = document.getElementById("email_error");
 
-    if (!loginForm || !classNameError || !passwordError) {
-      console.error("必要な要素が見つかりません: #loginForm, #class_name_error, または #password_error");
-      return;
-    }
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault(); // フォームのデフォルト動作を無効化
 
-    loginForm.addEventListener("submit", async function (e) {
-      e.preventDefault(); // フォームのデフォルト動作を無効化
+        const className = document.getElementById("class_name").value;
+        const password = document.getElementById("password").value;
+        const email = document.getElementById("email")?.value;
 
-      const className = document.getElementById("class_name").value;
-      const password = document.getElementById("password").value;
+        // エラーメッセージをリセット
+        classNameError.style.display = "none";
+        passwordError.style.display = "none";
+        emailError.style.display = "none";
 
-      // エラーメッセージをリセット
-      classNameError.style.display = "none";
-      passwordError.style.display = "none";
+        try {
+          const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+          const response = await fetch("{{ route('login.submit') }}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({ class_name: className, password: password, email: email }),
+          });
 
-      try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]');
-        if (!csrfToken) {
-          throw new Error("CSRFトークンが見つかりません");
+          const data = await response.json();
+
+          if (response.ok) {
+            if (data.is_first_login) {
+              // 初回ログイン時の処理
+              emailContainer.style.display = "block"; // メールアドレス入力欄を表示
+              emailError.textContent = data.message;
+              emailError.style.display = "block";
+            } else if (data.redirect_url) {
+              // 通常ログイン成功時の処理
+              window.location.href = data.redirect_url; // リダイレクト
+            }
+          } else {
+            // エラーメッセージを表示
+            if (data.error_type === "class_name") {
+              classNameError.textContent = "クラス名が間違っています。";
+              classNameError.style.display = "block";
+            }
+            if (data.error_type === "password") {
+              passwordError.textContent = "パスワードが間違っています。";
+              passwordError.style.display = "block";
+            }
+          }
+        } catch (error) {
+          console.error("ログインエラー:", error);
+          classNameError.textContent = "サーバーエラーが発生しました。";
+          classNameError.style.display = "block";
         }
-
-        const response = await fetch("{{ route('login.submit') }}", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken.getAttribute("content"),
-          },
-          body: JSON.stringify({ class_name: className, password: password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // ログイン成功時の処理
-          if (data.redirect_url) {
-            window.location.href = data.redirect_url; // リダイレクト
-          }
-        } else {
-          // エラーメッセージを表示
-          if (data.error_type === "class_name") {
-            classNameError.textContent = "クラス名が間違っています。";
-            classNameError.style.display = "block";
-          }
-          if (data.error_type === "password") {
-            passwordError.textContent = "パスワードが間違っています。";
-            passwordError.style.display = "block";
-          }
-          if (!data.error_type) {
-            classNameError.textContent = "クラス名が間違っています。";
-            passwordError.textContent = "パスワードが間違っています。";
-            classNameError.style.display = "block";
-            passwordError.style.display = "block";
-          }
-        }
-      } catch (error) {
-        console.error("ログインエラー:", error);
-        classNameError.textContent = "サーバーエラーが発生しました。";
-        classNameError.style.display = "block";
-      }
+      });
     });
-  });
 
-  document.addEventListener("DOMContentLoaded", function () {
-  const loginModal = document.getElementById("login");
-  const watchModal = document.getElementById("watch");
-  const developmentButton = document.getElementById("development_button");
-  const loginButton = document.getElementById("login_button");
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginModal = document.getElementById("login");
+      const watchModal = document.getElementById("watch");
+      const developmentButton = document.getElementById("development_button");
+      const loginButton = document.getElementById("login_button");
 
-  // パンフレット一覧ボタンをクリックしたとき
-  developmentButton.addEventListener("click", function () {
-    loginModal.classList.add("hidden");
-    watchModal.classList.remove("hidden");
-  });
+      // パンフレット一覧ボタンをクリックしたとき
+      developmentButton.addEventListener("click", function () {
+        loginModal.classList.add("hidden");
+        watchModal.classList.remove("hidden");
+      });
 
-  // 開発者の方はこちらボタンをクリックしたとき
-  loginButton.addEventListener("click", function () {
-    watchModal.classList.add("hidden");
-    loginModal.classList.remove("hidden");
-  });
-});
+      // 開発者の方はこちらボタンをクリックしたとき
+      loginButton.addEventListener("click", function () {
+        watchModal.classList.add("hidden");
+        loginModal.classList.remove("hidden");
+      });
+    });
   </script>
 </body>
 </html>
