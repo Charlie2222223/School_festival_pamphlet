@@ -73,7 +73,7 @@
                     <th>クラス名</th>
                     <th>権限</th>
                     <th>作成日</th>
-                    <th>操作</th>
+                    <th>ログイン状態</th> <!-- ログイン状態の列を追加 -->
                 </tr>
             </thead>
             <tbody>
@@ -84,8 +84,11 @@
                     <td>{{ $class->authority->authority_name ?? 'なし' }}</td>
                     <td>{{ $class->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <button onclick="editClass({{ $class->id }})">編集</button>
-                        <button onclick="deleteClass({{ $class->id }})">削除</button>
+                        @if ($class->is_logged_in)
+                            <span style="color: green;">● ログイン中</span>
+                        @else
+                            <span style="color: red;">● オフライン</span>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

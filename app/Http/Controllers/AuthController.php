@@ -33,9 +33,25 @@ class AuthController extends Controller
             return response()->json(['error_type' => 'password'], 422);
         }
 
+        // 管理者クラスの場合はメールアドレスをスキップ
+        if ($class->authority_id === 1) {
+            // ログイン状態を更新
+            $class->update(['is_logged_in' => true]);
+
+            // セッションにクラス情報を保存
+            session([
+                'class_id' => $class->id,
+                'class_name' => $class->class_name,
+                'authority_id' => $class->authority_id,
+            ]);
+
+            return response()->json([
+                'redirect_url' => route('poster_admin'),
+            ]);
+        }
+
         // 初回ログインの場合
         if ($class->is_first_login) {
-            // メールアドレスが送信されていない場合
             if (!$request->email) {
                 return response()->json([
                     'is_first_login' => true,
@@ -43,8 +59,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            // メールアドレスのドメインをチェック
-            $emailDomain = substr(strrchr($request->email, "@"), 1); // "@"以降を取得
+            $emailDomain = substr(strrchr($request->email, "@"), 1);
             if ($emailDomain !== 'ocsjoho.onmicrosoft.com') {
                 return response()->json([
                     'error_type' => 'email',
@@ -52,17 +67,21 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            // メールアドレスを保存し、初回ログインフラグを解除
             $class->mail = $request->email;
             $class->is_first_login = false;
             $class->save();
-
-            return response()->json([
-                'redirect_url' => route('poster.page'),
-            ]);
         }
 
-        // 通常ログイン成功
+        // ログイン状態を更新
+        $class->update(['is_logged_in' => true]);
+
+        // セッションにクラス情報を保存
+        session([
+            'class_id' => $class->id,
+            'class_name' => $class->class_name,
+            'authority_id' => $class->authority_id,
+        ]);
+
         return response()->json([
             'redirect_url' => route('poster.page'),
         ]);
@@ -100,6 +119,15 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $classId = session('class_id');
+
+        if ($classId) {
+            $class = Classes::find($classId);
+            if ($class) {
+                $class->update(['is_logged_in' => false]); // ログイン状態を更新
+            }
+        }
+
         $request->session()->flush(); // セッションを全て削除
         return redirect()->route('login.page'); // ログインページへリダイレクト
     }

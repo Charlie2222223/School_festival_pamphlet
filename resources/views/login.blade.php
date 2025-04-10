@@ -99,6 +99,11 @@
               passwordError.textContent = "パスワードが間違っています。";
               passwordError.style.display = "block";
             }
+            if (data.error_type === "email") {
+              emailError.textContent = data.message; // サーバーからのエラーメッセージを表示
+              emailError.style.display = "block";
+              emailContainer.style.display = "block"; // メールアドレス入力欄を再表示
+            }
           }
         } catch (error) {
           console.error("ログインエラー:", error);

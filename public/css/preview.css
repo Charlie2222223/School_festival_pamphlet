@@ -388,14 +388,12 @@ iframe {
     border: 1px solid #00fe19;
 }
 
-
 .division:hover {
     background-color: #eaffea;
     border-color: #00cc66;
     color: #00cc66;
     transition: all 0.2s ease;
 }
-
 
 .flex-content {
     flex-grow: 1;

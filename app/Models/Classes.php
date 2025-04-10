@@ -11,6 +11,7 @@ class Classes extends Model
         'password',
         'mail', // メールアドレス
         'is_first_login', // 初回ログイン判定
+        'is_logged_in', // ログイン状態を管理する属性を追加
     ];
 
     public function uploadedImages()
