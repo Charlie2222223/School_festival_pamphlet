@@ -43,7 +43,6 @@ class AdminController extends Controller
 
     public function admin_edit()
     {
-        // セッションの logged_in_users に class_id が存在するか確認
         $loggedInUsers = session('logged_in_users', []);
         $classId = session('class_id');
 
@@ -52,38 +51,35 @@ class AdminController extends Controller
             return redirect('/login');
         }
 
-        $classId = session('class_id');
+        // 管理者の場合は class_id を 4 に設定
+        $authorityId = session('authority_id');
+        if ($authorityId === 1) {
+            $classId = 4; // 管理者用の class_id を設定
+        }
 
-        // 最新の更新日時を取得
-        $latestUpdate = CodeSave::where('class_id', $classId)
+        $class_name = session('class_name');
+        $class = Classes::find($classId);
+
+        $latestCode = CodeSave::where('class_id', $classId)
             ->orderBy('updated_at', 'desc')
-            ->value('updated_at');
+            ->first();
 
-        // Carbon インスタンスに変換
-        $latestUpdate = $latestUpdate ? Carbon::parse($latestUpdate) : null;
-
-        // アップロードされた画像を取得
         $uploadedImages = UploadedImage::where('class_id', $classId)->get();
 
-        // クラス名のパターンに基づいて分類
         $rClasses = Classes::where('class_name', 'like', 'R%')->get();
         $sClasses = Classes::where('class_name', 'like', 'S%')->get();
         $jClasses = Classes::where('class_name', 'like', 'J%')->get();
 
-        // 各クラスに関連する最新のコードを取得
-        $allClasses = Classes::all();
-        foreach ($allClasses as $class) {
-            $latestCode = CodeSave::where('class_id', $class->id)
-                ->orderBy('created_at', 'desc')
-                ->first();
-
-            $class->html_code = $latestCode->html_code ?? null;
-            $class->css_code = $latestCode->css_code ?? null;
-            $class->js_code = $latestCode->js_code ?? null;
-        }
-
-        // ビューにデータを渡す
-        return view('acount', compact('uploadedImages', 'rClasses', 'sClasses', 'jClasses', 'allClasses', 'latestUpdate'));
+        return view('acount', [
+            'latest_update' => $latestCode?->updated_at,
+            'uploadedImages' => $uploadedImages,
+            'rClasses' => $rClasses,
+            'sClasses' => $sClasses,
+            'jClasses' => $jClasses,
+            'html_code' => $latestCode?->html_code,
+            'css_code' => $latestCode?->css_code,
+            'js_code' => $latestCode?->js_code,
+        ]);
     }
 
     public function admin_show()

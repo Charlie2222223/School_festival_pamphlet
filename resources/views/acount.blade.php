@@ -103,7 +103,7 @@ const csrfToken = "{{ csrf_token() }}";
 
 <div class="editor">
     <div class="editor-update-info">
-        <p>最新更新日: {{ $latestUpdate ? $latestUpdate->format('Y-m-d H:i:s') : '更新履歴がありません' }}</p>
+        <p>最新更新日: {{ $latest_update ? $latest_update->format('Y-m-d H:i:s') : '更新履歴がありません' }}</p>
     </div>
     <div class="editor-tab-buttons">
     <button onclick="switchEditor('html')" style="margin-left: 3%;">HTML</button>

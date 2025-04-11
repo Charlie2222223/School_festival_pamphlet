@@ -20,6 +20,7 @@ class PreviewController extends Controller
             return redirect('/login');
         }
 
+        // クラス分類を取得
         $rClasses = Classes::where('class_name', 'like', 'R%')->get();
         $sClasses = Classes::where('class_name', 'like', 'S%')->get();
         $jClasses = Classes::where('class_name', 'like', 'J%')->get();
@@ -38,31 +39,38 @@ class PreviewController extends Controller
             return redirect('/login');
         }
 
+        // 管理者の場合は class_id を 4 に設定
+        $authorityId = session('authority_id'); // セッションから authority_id を取得
+        if ($authorityId === 1) { // authority_id が 1 の場合は管理者
+            $classId = 5; // 管理者用の class_id を 4 に設定
+        }
+
+        // 現在のクラス情報を取得
         $class_name = session('class_name');
         $class = Classes::find($classId);
-        $uploadedImages = UploadedImage::where('class_id', $classId)->get();
 
         // 最新の保存済みコードを取得
         $latestCode = CodeSave::where('class_id', $classId)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc') // updated_at を基準に取得
             ->first();
 
-        // クラス分類も渡す
+        // アップロードされた画像を取得
+        $uploadedImages = UploadedImage::where('class_id', $classId)->get();
+
+        // クラス分類を取得
         $rClasses = Classes::where('class_name', 'like', 'R%')->get();
         $sClasses = Classes::where('class_name', 'like', 'S%')->get();
         $jClasses = Classes::where('class_name', 'like', 'J%')->get();
 
-        return view('preview', [
-            'class' => $class,
+        return view('acount', [
+            'latest_update' => $latestCode?->updated_at, // 最新の更新日時を渡す
             'uploadedImages' => $uploadedImages,
             'rClasses' => $rClasses,
             'sClasses' => $sClasses,
             'jClasses' => $jClasses,
-            'class_name' => $class_name,
-            // 保存済みコードを渡す
             'html_code' => $latestCode?->html_code,
-            'css_code'  => $latestCode?->css_code,
-            'js_code'   => $latestCode?->js_code,
+            'css_code' => $latestCode?->css_code,
+            'js_code' => $latestCode?->js_code,
         ]);
     }
 
@@ -77,21 +85,28 @@ class PreviewController extends Controller
             return redirect('/login');
         }
 
+        // 現在のクラス情報を取得
         $class = Classes::find($classId);
 
         // 最新の保存済みコードを取得
         $latestCode = CodeSave::where('class_id', $classId)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc') // updated_at を基準に取得
             ->first();
+
+        // クラス分類を取得
+        $rClasses = Classes::where('class_name', 'like', 'R%')->get();
+        $sClasses = Classes::where('class_name', 'like', 'S%')->get();
+        $jClasses = Classes::where('class_name', 'like', 'J%')->get();
 
         return view('preview', [
             'uploadedImages' => $class?->uploadedImages ?? [],
             'html_code' => $latestCode?->html_code,
             'css_code'  => $latestCode?->css_code,
             'js_code'   => $latestCode?->js_code,
-            'rClasses'  => Classes::where('class_name', 'like', 'R%')->get(),
-            'sClasses'  => Classes::where('class_name', 'like', 'S%')->get(),
-            'jClasses'  => Classes::where('class_name', 'like', 'J%')->get(),
+            'rClasses'  => $rClasses,
+            'sClasses'  => $sClasses,
+            'jClasses'  => $jClasses,
+            'latest_update' => $latestCode?->updated_at, // 最新の更新日時を渡す
         ]);
     }
 }
