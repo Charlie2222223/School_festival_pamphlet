@@ -11,7 +11,12 @@ class PreviewController extends Controller
 {
     public function index()
     {
-        if (!session()->has('class_id')) {
+        // セッションの logged_in_users に class_id が存在するか確認
+        $loggedInUsers = session('logged_in_users', []);
+        $classId = session('class_id');
+
+        // ログインしていない場合はリダイレクト
+        if (!collect($loggedInUsers)->contains('class_id', $classId)) {
             return redirect('/login');
         }
 
@@ -24,11 +29,15 @@ class PreviewController extends Controller
 
     public function previewPage()
     {
-        if (!session()->has('class_id')) {
+        // セッションの logged_in_users に class_id が存在するか確認
+        $loggedInUsers = session('logged_in_users', []);
+        $classId = session('class_id');
+
+        // ログインしていない場合はリダイレクト
+        if (!collect($loggedInUsers)->contains('class_id', $classId)) {
             return redirect('/login');
         }
 
-        $classId = session('class_id');
         $class_name = session('class_name');
         $class = Classes::find($classId);
         $uploadedImages = UploadedImage::where('class_id', $classId)->get();
@@ -59,11 +68,15 @@ class PreviewController extends Controller
 
     public function showPreview()
     {
-        if (!session()->has('class_id')) {
+        // セッションの logged_in_users に class_id が存在するか確認
+        $loggedInUsers = session('logged_in_users', []);
+        $classId = session('class_id');
+
+        // ログインしていない場合はリダイレクト
+        if (!collect($loggedInUsers)->contains('class_id', $classId)) {
             return redirect('/login');
         }
 
-        $classId = session('class_id');
         $class = Classes::find($classId);
 
         // 最新の保存済みコードを取得

@@ -120,8 +120,11 @@ class AdminController extends Controller
         $sClasses = Classes::with('authority')->where('class_name', 'like', 'S%')->get();
         $jClasses = Classes::with('authority')->where('class_name', 'like', 'J%')->get();
 
+        // セッションに保存されたログイン中のユーザー情報を取得
+        $logged_in_users = session('logged_in_users', []);
+
         // ビューにデータを渡す
-        return view('admin_user', compact('classes', 'rClasses', 'sClasses', 'jClasses'));
+        return view('admin_user', compact('classes', 'rClasses', 'sClasses', 'jClasses', 'logged_in_users'));
     }
 
     public function getClassCode($id)

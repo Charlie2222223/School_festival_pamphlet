@@ -41,7 +41,11 @@ const csrfToken = "{{ csrf_token() }}";
     <div class="sidebar-icon">
     <div class="icon">
         <div class="icon_circle"></div>
-        <p>{{ session('class_name') }}</p>
+        @if (session()->has('logged_in_users') && count(session('logged_in_users')) > 0)
+            <p>{{ session('logged_in_users')[0]['class_name'] }}</p> <!-- 最初のクラス名を表示 -->
+        @else
+            <p>クラス名がありません</p>
+        @endif
     </div>
     </div>
     <div class="sidebar-scrollable">

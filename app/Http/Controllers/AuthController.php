@@ -20,31 +20,31 @@ class AuthController extends Controller
         $request->validate([
             'class_name' => 'required|string',
             'password' => 'required|string',
-            'email' => 'nullable|email', // メールアドレスは初回ログイン時のみ必須
+            'email' => 'nullable|email',
         ]);
 
         $class = Classes::where('class_name', $request->class_name)->first();
 
         if (!$class) {
-            return response()->json(['error_type' => 'class_name'], 422);
+            return response()->json(['error_type' => 'class_name', 'message' => 'クラス名が間違っています。'], 422);
         }
 
         if (!Hash::check($request->password, $class->password)) {
-            return response()->json(['error_type' => 'password'], 422);
+            return response()->json(['error_type' => 'password', 'message' => 'パスワードが間違っています。'], 422);
         }
 
-        // 管理者クラスの場合はメールアドレスをスキップ
+        // 管理者クラスの場合
         if ($class->authority_id === 1) {
-            // ログイン状態を更新
-            $class->update(['is_logged_in' => true]);
-
-            // セッションにクラス情報を保存
-            session([
+            // セッションにクラス情報を追加
+            $loggedInUsers = session('logged_in_users', []);
+            $loggedInUsers[] = [
                 'class_id' => $class->id,
                 'class_name' => $class->class_name,
                 'authority_id' => $class->authority_id,
-            ]);
+            ];
+            session(['logged_in_users' => $loggedInUsers]);
 
+            // JSON レスポンスを返す
             return response()->json([
                 'redirect_url' => route('poster_admin'),
             ]);
@@ -72,15 +72,15 @@ class AuthController extends Controller
             $class->save();
         }
 
-        // ログイン状態を更新
-        $class->update(['is_logged_in' => true]);
-
-        // セッションにクラス情報を保存
-        session([
+        // セッションにクラス情報を追加
+        $loggedInUsers = session('logged_in_users', []);
+        $loggedInUsers[] = [
             'class_id' => $class->id,
             'class_name' => $class->class_name,
             'authority_id' => $class->authority_id,
-        ]);
+        ];
+        session(['class_id' => $class->id]);
+        session(['logged_in_users' => $loggedInUsers]);
 
         return response()->json([
             'redirect_url' => route('poster.page'),
@@ -122,10 +122,12 @@ class AuthController extends Controller
         $classId = session('class_id');
 
         if ($classId) {
-            $class = Classes::find($classId);
-            if ($class) {
-                $class->update(['is_logged_in' => false]); // ログイン状態を更新
-            }
+            $loggedInUsers = session('logged_in_users', []);
+            $updatedUsers = array_filter($loggedInUsers, function ($user) use ($classId) {
+                return $user['class_id'] !== $classId;
+            });
+
+            session(['logged_in_users' => $updatedUsers]); // 更新されたログインユーザーリストを保存
         }
 
         $request->session()->flush(); // セッションを全て削除

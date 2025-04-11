@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('classes', function (Blueprint $table) {
-            $table->boolean('is_logged_in')->default(false)->after('is_first_login'); // ログイン状態を管理するカラムを追加
+            $table->dropColumn('is_logged_in'); // ログイン状態カラムを削除
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('classes', function (Blueprint $table) {
-            $table->dropColumn('is_logged_in'); // ログイン状態カラムを削除
+            $table->boolean('is_logged_in')->default(false); // ログイン状態カラムを再追加
         });
     }
 };
