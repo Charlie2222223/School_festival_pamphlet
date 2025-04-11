@@ -43,8 +43,12 @@ class AdminController extends Controller
 
     public function admin_edit()
     {
-        // セッションにクラスIDがない場合はログイン画面にリダイレクト
-        if (!session()->has('class_id')) {
+        // セッションの logged_in_users に class_id が存在するか確認
+        $loggedInUsers = session('logged_in_users', []);
+        $classId = session('class_id');
+
+        // ログインしていない場合はリダイレクト
+        if (!collect($loggedInUsers)->contains('class_id', $classId)) {
             return redirect('/login');
         }
 

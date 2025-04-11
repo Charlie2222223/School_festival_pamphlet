@@ -42,6 +42,7 @@ class AuthController extends Controller
                 'class_name' => $class->class_name,
                 'authority_id' => $class->authority_id,
             ];
+            session(['class_id' => $class->id]);
             session(['logged_in_users' => $loggedInUsers]);
 
             // JSON レスポンスを返す
