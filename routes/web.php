@@ -31,6 +31,7 @@ Route::get('/admin_edit', [AdminController::class, 'admin_edit'])->name('admin_e
 
 Route::get('/get-class-code/{id}', [AdminController::class, 'getClassCode']);
 Route::get('/code-history/{classId}', [CodeController::class, 'getHistory']);
+Route::post('/delete-code-history', [CodeController::class, 'delete'])->name('code.history.delete');
 
 Route::get('/admin_classes', [AdminController::class, 'admin_classes'])->name('admin_user');
 

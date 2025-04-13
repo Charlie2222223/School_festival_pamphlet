@@ -63,4 +63,17 @@ class CodeController extends Controller
             ->get();
         return response()->json(['success' => true, 'history' => $history]);
     }
+
+    public function delete(Request $request)
+    {
+        $historyIds = $request->input('history_ids', []);
+
+        if (empty($historyIds)) {
+            return response()->json(['success' => false, 'message' => '削除する履歴が選択されていません。']);
+        }
+
+        CodeSave::whereIn('id', $historyIds)->delete();
+
+        return response()->json(['success' => true, 'message' => '選択した履歴を削除しました。']);
+    }
 }

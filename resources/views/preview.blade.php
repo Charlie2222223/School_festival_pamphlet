@@ -128,9 +128,12 @@
         <div class="modal-content">
           <span id="closeModal" class="close">&times;</span>
           <h2>コード履歴</h2>
-          <div id="historyList">
-            <!-- 履歴がここに表示されます -->
-          </div>
+          <form id="deleteHistoryForm">
+            <div id="historyList">
+              
+            </div>
+            <button type="button" id="deleteSelectedHistoryBtn" class="delete-button">選択した履歴を削除</button>
+          </form>
         </div>
       </div>
     </div>
@@ -394,6 +397,7 @@
                           const historyItem = document.createElement("div");
                           historyItem.classList.add("history-item");
                           historyItem.innerHTML = `
+                              <input type="checkbox" name="history_ids[]" value="${item.id}">
                               <p><strong>保存日時:</strong> ${item.created_at}</p>
                               <p><strong>コメント:</strong> ${item.comment || "コメントがありません"}</p>
                           `;
