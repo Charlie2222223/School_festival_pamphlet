@@ -62,7 +62,7 @@ class PreviewController extends Controller
         $sClasses = Classes::where('class_name', 'like', 'S%')->get();
         $jClasses = Classes::where('class_name', 'like', 'J%')->get();
 
-        return view('acount', [
+        return view('preview', [
             'latest_update' => $latestCode?->updated_at, // 最新の更新日時を渡す
             'uploadedImages' => $uploadedImages,
             'rClasses' => $rClasses,
