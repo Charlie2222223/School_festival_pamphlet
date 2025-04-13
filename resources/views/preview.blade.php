@@ -130,7 +130,7 @@
           <h2>コード履歴</h2>
           <form id="deleteHistoryForm">
             <div id="historyList">
-              
+                <!-- 履歴がここに表示されます -->
             </div>
             <button type="button" id="deleteSelectedHistoryBtn" class="delete-button">選択した履歴を削除</button>
           </form>
@@ -427,6 +427,48 @@
               historyModal.style.display = "none";
           }
       });
+
+      const deleteHistoryButton = document.getElementById("deleteSelectedHistoryBtn");
+
+      // 選択した履歴を削除
+      deleteHistoryButton.addEventListener("click", function () {
+          const checkedBoxes = document.querySelectorAll('input[name="history_ids[]"]:checked');
+          if (checkedBoxes.length === 0) {
+              alert('削除したい履歴を選択してください。');
+              return;
+          }
+
+          if (!confirm('選択した履歴を削除しますか？')) return;
+
+          const formData = new FormData();
+          checkedBoxes.forEach(box => formData.append('history_ids[]', box.value));
+          formData.append('_token', csrfToken);
+
+          fetch('/delete-code-history', {
+              method: 'POST',
+              body: formData
+          })
+          .then(res => res.json())
+          .then(data => {
+              if (data.success) {
+                  // 削除された履歴をリストから削除
+                  checkedBoxes.forEach(box => {
+                      box.closest('.history-item').remove();
+                  });
+
+                  // 履歴が空の場合のメッセージ
+                  if (document.querySelectorAll('#historyList .history-item').length === 0) {
+                      document.getElementById('historyList').innerHTML = "<p>履歴がありません。</p>";
+                  }
+              } else {
+                  alert('削除に失敗しました');
+              }
+          })
+          .catch(error => {
+              console.error("削除エラー:", error);
+              alert('削除中にエラーが発生しました。');
+          });
+      });
     });
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -458,6 +500,7 @@
                             historyItem.dataset.css = encodeURIComponent(item.css_code);
                             historyItem.dataset.js = encodeURIComponent(item.js_code);
                             historyItem.innerHTML = `
+                                <input type="checkbox" name="history_ids[]" value="${item.id}">
                                 <p><strong>保存日時:</strong> ${item.created_at}</p>
                                 <p><strong>コメント:</strong> ${item.comment || "コメントがありません"}</p>
                             `;
