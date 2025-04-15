@@ -52,28 +52,6 @@ class AuthController extends Controller
             ]);
         }
 
-        // 初回ログインの場合
-        if ($class->is_first_login) {
-            if (!$request->email) {
-                return response()->json([
-                    'is_first_login' => true,
-                    'message' => '初回ログインです。メールアドレスを入力してください。',
-                ]);
-            }
-
-            $emailDomain = substr(strrchr($request->email, "@"), 1);
-            if ($emailDomain !== 'ocsjoho.onmicrosoft.com') {
-                return response()->json([
-                    'error_type' => 'email',
-                    'message' => 'ocsjoho.onmicrosoft.comのメールアドレスを使用してください。',
-                ], 422);
-            }
-
-            $class->mail = $request->email;
-            $class->is_first_login = false;
-            $class->save();
-        }
-
         // セッションにクラス情報を追加
         $loggedInUsers = session('logged_in_users', []);
         $loggedInUsers[] = [
