@@ -93,6 +93,7 @@ class AuthController extends Controller
                 session(['class_id' => $class->id]);
                 session(['logged_in_users' => $loggedInUsers]);
                 session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+                Log::info('セッション全体:', session()->all());
 
 
                 $redirectUrl = route('poster.page');
@@ -188,6 +189,21 @@ class AuthController extends Controller
 
                 return redirect()->route('class.registration.page'); // クラス登録ページへリダイレクト
             }
+
+            $class = Classes::where('class_name', $request->class_name)->first();
+
+            $loggedInUsers[] = [
+                'class_id' => $class->id,
+                'class_name' => $class->class_name,
+                'authority_id' => $class->authority_id,
+                'user_name' => $user->name, // ユーザー名を追加
+            ];
+            session(['class_id' => $class->id]);
+            session(['logged_in_users' => $loggedInUsers]);
+            session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+            Log::info('セッション全体:', session()->all());
+
+            $redirectUrl = route('poster.page');
 
             // クラス情報がある場合、ポスター一覧ページへリダイレクト
             return redirect()->route('poster.page');
