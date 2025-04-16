@@ -190,7 +190,7 @@ class AuthController extends Controller
                 return redirect()->route('class.registration.page'); // クラス登録ページへリダイレクト
             }
 
-            $class = Classes::where('class_name', $request->class_name)->first();
+            $class = Classes::where('id', $user->class_id)->first();
 
             $loggedInUsers[] = [
                 'class_id' => $class->id,
