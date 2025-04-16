@@ -185,3 +185,32 @@ h1 {
     text-align: center; 
     z-index: 10; 
 }
+
+/* Microsoft ログインボタンのスタイル */
+.login-with-microsoft {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    margin-left: 25%;
+    margin-top: 17%;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0078d4; /* Microsoft ブルー */
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-with-microsoft:hover {
+    background-color: #005a9e; /* ホバー時の色 */
+    transform: scale(1.05); /* ホバー時の拡大 */
+}
+
+.login-with-microsoft:active {
+    background-color: #003a6d; /* クリック時の色 */
+    transform: scale(0.98); /* クリック時の縮小 */
+}

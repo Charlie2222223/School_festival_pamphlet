@@ -9,8 +9,6 @@ class Classes extends Model
     protected $fillable = [
         'class_name',
         'password',
-        'mail', // メールアドレス
-        'is_first_login', // 初回ログイン判定
         'is_logged_in', // ログイン状態を管理する属性を追加
     ];
 
@@ -27,5 +25,10 @@ class Classes extends Model
     public function codeSaves()
     {
         return $this->hasMany(CodeSave::class, 'class_id'); // 1つのクラスに複数のコード保存
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'class_id'); // 1つのクラスに複数のユーザー
     }
 }

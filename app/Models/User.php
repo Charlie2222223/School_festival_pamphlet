@@ -13,18 +13,20 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * 保存可能なフィールド
      *
      * @var list<string>
      */
     protected $fillable = [
         'name',
         'email',
+        'microsoft_id',
         'password',
+        'class_id', // クラスIDを追加
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * 隠すフィールド（JSON出力時）
      *
      * @var list<string>
      */
@@ -44,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(Classes::class, 'class_id'); // Classes モデルとのリレーション
     }
 }
