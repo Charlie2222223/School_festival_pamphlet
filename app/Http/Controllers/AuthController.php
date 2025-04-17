@@ -76,6 +76,7 @@ class AuthController extends Controller
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
                 session(['class_id' => $class->id]);
+                session(['class_name' => $class->class_name]);
                 session(['authority_id' => $class->authority_id]);
                 session(['logged_in_users' => $loggedInUsers]);
                 session(['user_name' => $user->name]); // ユーザー名をセッションに保存
@@ -91,6 +92,7 @@ class AuthController extends Controller
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
                 session(['class_id' => $class->id]);
+                session(['class_name' => $class->class_name]);
                 session(['logged_in_users' => $loggedInUsers]);
                 session(['user_name' => $user->name]); // ユーザー名をセッションに保存
                 Log::info('セッション全体:', session()->all());
@@ -202,6 +204,7 @@ class AuthController extends Controller
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
                 session(['class_id' => $class->id]);
+                session(['class_name' => $class->class_name]);
                 session(['authority_id' => $class->authority_id]);
                 session(['logged_in_users' => $loggedInUsers]);
                 session(['user_name' => $user->name]); // ユーザー名をセッションに保存
@@ -217,6 +220,8 @@ class AuthController extends Controller
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
                 session(['class_id' => $class->id]);
+                session(['class_name' => $class->class_name]);
+                session(['authority_id' => $class->authority_id]);
                 session(['logged_in_users' => $loggedInUsers]);
                 session(key: ['user_name' => $user->name]); // ユーザー名をセッションに保存
                 Log::info('セッション全体:', session()->all());

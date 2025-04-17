@@ -23,22 +23,6 @@ class DatabaseSeeder extends Seeder
                 'comment' => '管理者クラス1のテストデータです。',
                 'authority_id' => 1, // 権限ID
             ],
-            [
-                'class_name' => '管理者クラス2',
-                'password' => Hash::make('adminpassword2'),
-                'shop_name' => '管理者ショップ2',
-                'class_room' => 'Admin Room 102',
-                'comment' => '管理者クラス2のテストデータです。',
-                'authority_id' => 1, // 権限ID
-            ],
-            [
-                'class_name' => '管理者クラス3',
-                'password' => Hash::make('adminpassword3'),
-                'shop_name' => '管理者ショップ3',
-                'class_room' => 'Admin Room 103',
-                'comment' => '管理者クラス3のテストデータです。',
-                'authority_id' => 1, // 権限ID
-            ],
         ];
 
         foreach ($adminUsers as $adminUser) {

@@ -41,7 +41,10 @@
       <div class="sidebar-icon">
         <div class="icon">
           <div class="icon_circle"></div>
-          <p>{{ session('user_name', 'ゲスト') }}</p>
+          <div class="user-info">
+            <p>{{ session('class_name', 'ゲスト') }}</p>
+            <p>{{ session('user_name', 'ゲスト') }}</p>
+        </div>
         </div>
       </div>
       <div class="sidebar-scrollable">
