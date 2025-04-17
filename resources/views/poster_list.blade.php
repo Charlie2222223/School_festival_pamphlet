@@ -16,9 +16,6 @@
         <div class="icon">
             <div class="icon_circle"></div>
                 <p>{{ session('user_name', 'ゲスト') }}</p> <!-- 最初のクラス名を表示 -->
-                <?php
-Log::info('セッション全体:', session()->all());
-?>
         </div>
         </div>
         <div class="sidebar-scrollable">

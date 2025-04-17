@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Classes;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CodeSave;
@@ -166,7 +166,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(): RedirectResponse
     {
         try {
             // Microsoft アカウントからユーザー情報を取得
@@ -192,21 +192,40 @@ class AuthController extends Controller
 
             $class = Classes::where('id', $user->class_id)->first();
 
-            $loggedInUsers[] = [
-                'class_id' => $class->id,
-                'class_name' => $class->class_name,
-                'authority_id' => $class->authority_id,
-                'user_name' => $user->name, // ユーザー名を追加
-            ];
-            session(['class_id' => $class->id]);
-            session(['logged_in_users' => $loggedInUsers]);
-            session(['user_name' => $user->name]); // ユーザー名をセッションに保存
-            Log::info('セッション全体:', session()->all());
+            if($class->authority_id === 1){
+                // authority_id が 1 の場合、管理者クラスとして処理
+                $loggedInUsers = session('logged_in_users', []);
+                $loggedInUsers[] = [
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'user_name' => $user->name, // ユーザー名を追加
+                ];
+                session(['class_id' => $class->id]);
+                session(['authority_id' => $class->authority_id]);
+                session(['logged_in_users' => $loggedInUsers]);
+                session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+                Log::info('セッション全体:', session()->all());
 
-            $redirectUrl = route('poster.page');
+                $redirectUrl = route('poster_admin');
+            } else {
+                $loggedInUsers = session('logged_in_users', []);
+                $loggedInUsers[] = [
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'user_name' => $user->name, // ユーザー名を追加
+                ];
+                session(['class_id' => $class->id]);
+                session(['logged_in_users' => $loggedInUsers]);
+                session(key: ['user_name' => $user->name]); // ユーザー名をセッションに保存
+                Log::info('セッション全体:', session()->all());
+    
+                $redirectUrl = route('poster.page');
+            }
 
-            // クラス情報がある場合、ポスター一覧ページへリダイレクト
-            return redirect()->route('poster.page');
+            return redirect($redirectUrl);
+
         } catch (\Exception $e) {
             // エラー内容をログに記録
             Log::error('Microsoftログインエラー: ' . $e->getMessage());
