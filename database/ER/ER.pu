@@ -1,4 +1,4 @@
-@startuml Fashion-FolderDB
+@startuml School_festival_pamphletDB
 hide circle
 skinparam linetype ortho
 
@@ -11,7 +11,7 @@ entity "classes (クラス)" as classes {
     * class_room                       : varchar(255)    : 教室名
     * comment                          : text            : クラスのコメント
     * authority_id                     : bigint unsigned : 権限ID (FK)
-    * mail                             : vqrchar(255)    : メールアドレス
+    * mail                             : varchar(255)    : メールアドレス
     * is_first_login                   : boolean         : 初回ログインフラグ
     * created_at                       : timestamp       : 作成日時
     * updated_at                       : timestamp       : 更新日時
@@ -44,6 +44,7 @@ entity "code_save (コードセーブデータ)" as code_save {
     * html_code                        : longtext        : HTMLのコード
     * css_code                         : longtext        : CSSのコード
     * js_code                          : longtext        : JSのコード
+    * comment                          : text            : コメント
     * main_save_date                   : boolean         : メインのコードかの判定
     * created_at                       : timestamp       : 作成日時
     * updated_at                       : timestamp       : 更新日時
@@ -57,8 +58,25 @@ entity "authorities (権限)" as authorities {
     * updated_at                       : timestamp       : 更新日時
 }
 
+entity "users (ユーザー)" as users {
+    * <<PK>> id                        : bigint unsigned : ユーザーID
+    --
+    * name                             : varchar(255)    : 名前
+    * email                            : varchar(255)    : メールアドレス
+    * last_login_at                    : timestamp       : 最終ログイン日時
+    * is_online                        : boolean         : オンライン状態
+    * microsoft_id                     : varchar(255)    : Microsoft ID
+    * email_verified_at                : timestamp       : メール確認日時
+    * password                         : varchar(255)    : パスワード
+    * class_id                         : bigint unsigned : クラスID (FK)
+    * remember_token                   : varchar(100)    : リメンバートークン
+    * created_at                       : timestamp       : 作成日時
+    * updated_at                       : timestamp       : 更新日時
+}
+
 classes ||--o{ class_images : "1対多"
 classes ||--o{ uploaded_images : "1対多"
 classes ||--o{ code_save : "1対多"
 classes ||--o{ authorities : "多対1"
+classes ||--o{ users : "1対多"
 @enduml
