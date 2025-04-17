@@ -18,7 +18,7 @@
             <div class="user-info">
                 <p>{{ session('class_name', 'ゲスト') }}</p>
                 <p>{{ session('user_name', 'ゲスト') }}</p>
-            </div>
+            </div>  
         </div>
         </div>
         <div class="sidebar-scrollable">
@@ -72,26 +72,44 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>クラス名</th>
-                    <th>権限</th>
-                    <th>作成日</th>
-                    <th>ログイン状態</th> <!-- ログイン状態の列を追加 -->
+                    <th>ログイン状態</th>
+                    <th>登録ユーザー</th>
+                    <th>ログイン中のユーザー</th> <!-- ログイン中のユーザー列を追加 -->
                 </tr>
             </thead>
             <tbody>
                 @foreach ($classes as $class)
                 <tr>
-                    <td>{{ $class->id }}</td>
                     <td>{{ $class->class_name }}</td>
-                    <td>{{ $class->authority->authority_name ?? 'なし' }}</td>
-                    <td>{{ $class->created_at->format('Y-m-d') }}</td>
                     <td>
                         @if (collect($logged_in_users)->contains('class_id', $class->id))
                             <span style="color: green;">● ログイン中</span>
                         @else
                             <span style="color: red;">● オフライン</span>
                         @endif
+                    </td>
+                    <td>
+                        <details>
+                            <summary>ユーザー一覧</summary>
+                            <ul>
+                                @foreach ($class->users as $user)
+                                <li>{{ $user->name }} ({{ $user->email }})</li>
+                                @endforeach
+                            </ul>
+                        </details>
+                    </td>
+                    <td>
+                        <details>
+                            <summary>ログイン中のユーザー</summary>
+                            <ul>
+                                @foreach ($logged_in_users as $loggedInUser)
+                                    @if ($loggedInUser['class_id'] === $class->id)
+                                        <li>{{ $loggedInUser['user_name'] }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </details>
                     </td>
                 </tr>
                 @endforeach

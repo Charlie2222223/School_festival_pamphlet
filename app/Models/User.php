@@ -23,6 +23,8 @@ class User extends Authenticatable
         'microsoft_id',
         'password',
         'class_id', // クラスIDを追加
+        'last_login_at',
+        'is_online',
     ];
 
     /**

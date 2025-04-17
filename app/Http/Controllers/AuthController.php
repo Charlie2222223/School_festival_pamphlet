@@ -75,11 +75,17 @@ class AuthController extends Controller
                     'authority_id' => $class->authority_id,
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
-                session(['class_id' => $class->id]);
-                session(['class_name' => $class->class_name]);
-                session(['authority_id' => $class->authority_id]);
-                session(['logged_in_users' => $loggedInUsers]);
-                session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+                $user->update([
+                    'last_login_at' => now(),
+                    'is_online' => true, // オンライン状態を記録
+                ]);
+                session([
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'logged_in_users' => $loggedInUsers,
+                    'user_name' => $user->name,
+                ]);
 
                 $redirectUrl = route('poster_admin');
             } else {
@@ -91,10 +97,17 @@ class AuthController extends Controller
                     'authority_id' => $class->authority_id,
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
-                session(['class_id' => $class->id]);
-                session(['class_name' => $class->class_name]);
-                session(['logged_in_users' => $loggedInUsers]);
-                session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+                $user->update([
+                    'last_login_at' => now(),
+                    'is_online' => true, // オンライン状態を記録
+                ]);
+                session([
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'logged_in_users' => $loggedInUsers,
+                    'user_name' => $user->name,
+                ]);
                 Log::info('セッション全体:', session()->all());
 
 
@@ -138,6 +151,14 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user instanceof User) {
+            $user->update(['is_online' => false]);
+        } else {
+            Log::error('Auth::user()がUserモデルのインスタンスを返していません。');
+        }
+
         $classId = session('class_id');
 
         if ($classId) {
@@ -203,11 +224,17 @@ class AuthController extends Controller
                     'authority_id' => $class->authority_id,
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
-                session(['class_id' => $class->id]);
-                session(['class_name' => $class->class_name]);
-                session(['authority_id' => $class->authority_id]);
-                session(['logged_in_users' => $loggedInUsers]);
-                session(['user_name' => $user->name]); // ユーザー名をセッションに保存
+                $user->update([
+                    'last_login_at' => now(),
+                    'is_online' => true, // オンライン状態を記録
+                ]);
+                session([
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'logged_in_users' => $loggedInUsers,
+                    'user_name' => $user->name,
+                ]);
                 Log::info('セッション全体:', session()->all());
 
                 $redirectUrl = route('poster_admin');
@@ -219,11 +246,19 @@ class AuthController extends Controller
                     'authority_id' => $class->authority_id,
                     'user_name' => $user->name, // ユーザー名を追加
                 ];
-                session(['class_id' => $class->id]);
-                session(['class_name' => $class->class_name]);
-                session(['authority_id' => $class->authority_id]);
-                session(['logged_in_users' => $loggedInUsers]);
-                session(key: ['user_name' => $user->name]); // ユーザー名をセッションに保存
+
+                $user->update([
+                    'last_login_at' => now(),
+                    'is_online' => true, // オンライン状態を記録
+                ]);
+                
+                session([
+                    'class_id' => $class->id,
+                    'class_name' => $class->class_name,
+                    'authority_id' => $class->authority_id,
+                    'logged_in_users' => $loggedInUsers,
+                    'user_name' => $user->name,
+                ]);
                 Log::info('セッション全体:', session()->all());
     
                 $redirectUrl = route('poster.page');
@@ -238,5 +273,23 @@ class AuthController extends Controller
             // エラー内容を画面に表示（デバッグ用）
             return redirect()->route('login')->withErrors(['error' => 'Microsoftログインに失敗しました。']);
         }
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        // ユーザーの最終ログイン時間を更新
+        $user->update([
+            'last_login_at' => now(),
+            'is_online' => true, // オンライン状態を記録
+        ]);
+
+        // ログイン中のユーザーをセッションに保存
+        $loggedInUsers = session('logged_in_users', []);
+        $loggedInUsers[] = [
+            'class_id' => $user->class_id,
+            'class_name' => $user->class->class_name ?? '不明',
+            'user_name' => $user->name,
+        ];
+        session(['logged_in_users' => $loggedInUsers]);
     }
 }
